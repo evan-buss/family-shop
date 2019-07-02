@@ -1,33 +1,46 @@
+import 'package:family_list/redux/state.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:redux/redux.dart';
+import 'package:family_list/redux/reducers.dart';
+
 import 'package:family_list/screens/family_screen.dart';
-import 'package:family_list/screens/first_screen.dart';
 import 'package:family_list/screens/home_screen.dart';
 import 'package:family_list/screens/personal_screen.dart';
-import 'package:flutter/material.dart';
-//import 'routes.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  final store = new Store<AppState>(todosReducer, initialState: new AppState());
+  runApp(MyApp(store: store));
+}
 
 class MyApp extends StatelessWidget {
+  Store<AppState> store;
+
+  MyApp({this.store});
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Shopping List',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blueGrey,
-      ),
-      home: MyHomePage(title: 'Home'),
+    return StoreProvider<AppState>(
+      store: store,
+      child: MaterialApp(
+        title: 'Shopping List',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          // This is the theme of your application.
+          //
+          // Try running your application with "flutter run". You'll see the
+          // application has a blue toolbar. Then, without quitting the app, try
+          // changing the primarySwatch below to Colors.green and then invoke
+          // "hot reload" (press "r" in the console where you ran "flutter run",
+          // or simply save your changes to "hot reload" in a Flutter IDE).
+          // Notice that the counter didn't reset back to zero; the application
+          // is not restarted.
+          primarySwatch: Colors.blueGrey,
+        ),
+        home: MyHomePage(title: 'Home'),
 //      routes: Routes.routes,
+      ),
     );
   }
 }
@@ -60,14 +73,13 @@ class _MyHomePageState extends State<MyHomePage> {
   static int _selectedIndex = 0;
 
   static const TextStyle optionStyle =
-  TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
   static const List<Widget> _widgetOptions = <Widget>[
     HomeScreen(false),
     PersonalScreen(),
     FamilyScreen()
   ];
-
 
   @override
   Widget build(BuildContext context) {
@@ -83,17 +95,15 @@ class _MyHomePageState extends State<MyHomePage> {
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex)
-      ),
-      bottomNavigationBar: BottomNavigationBar (
+      body: Center(child: _widgetOptions.elementAt(_selectedIndex)),
+      bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
         selectedItemColor: Colors.blueAccent,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            title: Text ("Home"),
+            title: Text("Home"),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
@@ -105,10 +115,10 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
-//      floatingActionButton: FloatingActionButton(
-//        tooltip: 'Increment',
-//        child: Icon(Icons.add),
-//      ), // This trailing comma makes auto-formatting nicer for build methods.
+      floatingActionButton: FloatingActionButton(
+        tooltip: 'Increment',
+        child: Icon(Icons.add),
+      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
