@@ -1,13 +1,4 @@
-import 'state.dart';
-
-// One simple action: Increment
-enum Actions { Increment }
-
-class AddTodoAction {
-  final Todo todo;
-
-  AddTodoAction(this.todo);
-}
+enum Actions { ToggleLoggedInStatus }
 
 class UpdateNameAction {
   final String name;

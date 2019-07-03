@@ -6,7 +6,8 @@ class OverviewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    return Text ("Overview Screen");
+    return Center (
+      child: CircularProgressIndicator(),
+    );
   }
 }
