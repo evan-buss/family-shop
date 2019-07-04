@@ -1,4 +1,5 @@
 import 'package:family_list/screens/auth_screen.dart';
+import 'package:family_list/widgets/picture_card.dart';
 import 'package:flutter/material.dart';
 
 // This screens serves as the onboarding screen
@@ -42,30 +43,7 @@ class FirstScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView(
       children: <Widget>[
-        Card(
-          elevation: 4,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          margin: EdgeInsets.all(16),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: <Widget>[
-                Image.asset(
-                  "assets/images/list.png",
-                  height: 200,
-                  fit: BoxFit.cover,
-                ),
-                Text("Welcome to Family Shop",
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontFamily: "ProductSans",
-                        fontWeight: FontWeight.bold)),
-              ],
-            ),
-          ),
-        ),
+        PictureCard(text: "Welcome to Family Shop", assetString: "assets/images/cart.png",),
         _stepCard(1, "Create an account or log in", Icons.account_box, () {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => AuthScreen()));
