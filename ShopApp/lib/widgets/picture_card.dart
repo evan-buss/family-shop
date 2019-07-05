@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+/// PictureCard displays an image with text underneath it
+/// 
+/// Requires a title string and an asset string for photo location
 class PictureCard extends StatelessWidget {
   final String text;
   final String assetString;
