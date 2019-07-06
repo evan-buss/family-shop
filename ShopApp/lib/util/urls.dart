@@ -1,1 +1,1 @@
-final String personalList = "http://192.168.1.36:3000/item";
+final String personalList = "http://192.168.1.12:5005/api/personal";

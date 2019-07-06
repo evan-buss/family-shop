@@ -56,7 +56,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
                 itemCount: snapshot.data.length,
                 itemBuilder: (context, index) {
                   return ListTile(
-                    title: Text(snapshot.data[index].name),
+                    title: Text(snapshot.data[index].title),
                   );
                 });
           } else if (snapshot.hasError) {

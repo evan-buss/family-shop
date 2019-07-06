@@ -1,16 +1,16 @@
 class ListItem {
-  final int id;
+  final int itemID;
   final int userID;
-  final String name;
+  final String title;
   final String description;
 
-  ListItem({this.id, this.userID, this.name, this.description});
+  ListItem({this.itemID, this.userID, this.title, this.description});
 
   factory ListItem.fromJson(Map<String, dynamic> json) {
     return ListItem(
-        id: json['id'],
-        userID: json['user_id'],
-        name: json['name'],
+        itemID: json['itemID'],
+        userID: json['userID'],
+        title: json['title'],
         description: json['description']);
   }
 }
