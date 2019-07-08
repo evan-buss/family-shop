@@ -14,7 +14,8 @@ namespace ShopApi
     {
         public static void Main(string[] args)
         {
-            CreateWebHostBuilder(args).UseUrls("http://0.0.0.0:5005").Build().Run();
+            // Use 0.0.0.0 enables API access on local network.
+            CreateWebHostBuilder(args).UseUrls("http://0.0.0.0:5001").Build().Run();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>

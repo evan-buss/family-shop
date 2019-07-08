@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:family_list/screens/auth_screen.dart';
 import 'package:http/http.dart' as http;
 import 'package:family_list/models/ListItem.dart';
 import 'package:flutter/material.dart';
@@ -56,13 +57,47 @@ class _PersonalScreenState extends State<PersonalScreen> {
                 itemCount: snapshot.data.length,
                 itemBuilder: (context, index) {
                   return ListTile(
+                    onLongPress: () async {
+                      var sheetController = showBottomSheet(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return Card(
+                              elevation: 8,
+                              child: Padding(
+                                  padding: const EdgeInsets.all(32.0),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      Text(
+                                        'This is the modal bottom sheet. Slide down to dismiss.',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: Theme.of(context).accentColor,
+                                          fontSize: 24.0,
+                                        ),
+                                      ),
+                                      RaisedButton(
+                                        child: Text("CLOSE"),
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                      )
+                                    ],
+                                  )),
+                            );
+                          });
+                      print(sheetController);
+                      sheetController.closed.then((void wow) {
+                        print("wow");
+                      });
+                    },
                     title: Text(snapshot.data[index].title),
                   );
                 });
           } else if (snapshot.hasError) {
             return ListView(
               children: <Widget>[
-                Padding (
+                Padding(
                   padding: EdgeInsets.only(top: 160),
                   child: PictureCard(
                       text: "Connection Error",
@@ -71,7 +106,6 @@ class _PersonalScreenState extends State<PersonalScreen> {
               ],
             );
           }
-
           return Center(child: CircularProgressIndicator());
         },
       ),

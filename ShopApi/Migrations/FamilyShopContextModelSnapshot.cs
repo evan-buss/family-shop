@@ -33,6 +33,22 @@ namespace ShopApi.Migrations
 
                     b.ToTable("ListItems");
                 });
+
+            modelBuilder.Entity("ShopApi.Models.User", b =>
+                {
+                    b.Property<string>("email")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("passwordHash");
+
+                    b.Property<string>("passwordSalt");
+
+                    b.Property<string>("username");
+
+                    b.HasKey("email");
+
+                    b.ToTable("Users");
+                });
 #pragma warning restore 612, 618
         }
     }

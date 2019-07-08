@@ -1,12 +1,19 @@
+import 'dart:io';
+
 import 'package:family_list/redux/state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 import 'package:family_list/redux/reducers.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 import 'package:family_list/screens/family_screen.dart';
 import 'package:family_list/screens/home_screen.dart';
 import 'package:family_list/screens/personal_screen.dart';
+
+import 'package:family_list/util/urls.dart';
+import 'package:family_list/models/ListItem.dart';
 
 void main() {
   final store = new Store<AppState>(authReducer, initialState: new AppState());
@@ -51,6 +58,8 @@ class _PageContainerState extends State<PageContainer> {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
+  bool _fabIsVisible = false;
+
   @override
   void initState() {
     super.initState();
@@ -66,7 +75,6 @@ class _PageContainerState extends State<PageContainer> {
   // Change visible page on navigation bar selection
   void _handlePageSelection(int page) {
     _pageController.jumpToPage(page);
-    // duration: Duration(milliseconds: 300), curve: Curves.ease
   }
 
   @override
@@ -79,13 +87,18 @@ class _PageContainerState extends State<PageContainer> {
         onPageChanged: (int page) {
           setState(() {
             _activePage = page;
+            if (_activePage == 1) {
+              _fabIsVisible = true;
+            } else {
+              _fabIsVisible = false;
+            }
           });
         },
         children: <Widget>[HomeScreen(), PersonalScreen(), FamilyScreen()],
         controller: _pageController,
       ),
-      drawer: Drawer (
-        child: Text ("welcome"),
+      drawer: Drawer(
+        child: Text("welcome"),
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _activePage,
@@ -106,10 +119,25 @@ class _PageContainerState extends State<PageContainer> {
           ),
         ],
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   tooltip: 'Increment',
-      //   child: Icon(Icons.add),
-      // ),
+      floatingActionButton: Visibility(
+        visible: _fabIsVisible,
+        child: FloatingActionButton(
+          tooltip: 'New Item',
+          child: Icon(Icons.add),
+          onPressed: () async {
+            var item = new ListItem(
+                description: "FAB",
+                title: DateTime.now().toString(),
+                userID: 28);
+            final response = await http.post(personalList,
+                headers: {"Content-Type": "application/json"},
+                body: json.encode(item.toJson()));
+
+            print(json.encode(item.toJson()));
+            print('Response status ${response.statusCode}');
+          },
+        ),
+      ),
     );
   }
 }

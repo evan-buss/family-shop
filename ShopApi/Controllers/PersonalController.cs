@@ -4,10 +4,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ShopApi.Models;
+using System;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 
 namespace ShopApi.Controllers
 {
+    // Personal controller retrieves your own list items.
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class PersonalController : ControllerBase
@@ -23,6 +28,7 @@ namespace ShopApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ListItem>>> GetListItems()
         {
+            Console.WriteLine(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
             return await _context.ListItems.ToListAsync();
         }
 
@@ -31,21 +37,23 @@ namespace ShopApi.Controllers
         public async Task<ActionResult<ListItem>> GetListItem(long id)
         {
             var item = await _context.ListItems.FindAsync(id);
-            
-            if (item == null) {
+
+            if (item == null)
+            {
                 return NotFound();
             }
 
             return item;
         }
-        
+
         // POST api/personal
         [HttpPost]
         public async Task<ActionResult<IEnumerable<ListItem>>> PostListItem(ListItem item)
         {
+            Console.WriteLine("TITLE:" + item.title);
             _context.ListItems.Add(item);
             await _context.SaveChangesAsync();
-            
+
             return CreatedAtAction(nameof(GetListItem), new { id = item.itemID }, item);
         }
 

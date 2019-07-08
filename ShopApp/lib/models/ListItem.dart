@@ -13,4 +13,7 @@ class ListItem {
         title: json['title'],
         description: json['description']);
   }
+
+  Map<String, dynamic> toJson() =>
+      {'userID': userID, 'title': title, 'description': description};
 }

@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ShopApi.Models
 {
+    // ListItem represents an individual item in a user's list
     public class ListItem
     {
         [Key]
@@ -13,7 +14,8 @@ namespace ShopApi.Models
 
         public long userID { get; set; }
 
-        public ListItem () {
+        public ListItem()
+        {
             title = "Default Title";
             description = "Default Description";
             userID = 28;
