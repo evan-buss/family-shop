@@ -29,9 +29,7 @@ namespace ShopApi.Controllers
             {
                 return BadRequest("Invalid email or password");
             }
-            var savedPasswordhash = _authService.hashPassword(user.passwordSalt, password);
-            Console.WriteLine("GEN: " + savedPasswordhash + "  SAVED: " + user.passwordHash);
-            if (savedPasswordhash == user.passwordHash)
+            if (_authService.hashPassword(user.passwordSalt, password) == user.passwordHash)
             {
                 return new ObjectResult(_authService.GenerateToken(email));
             }
