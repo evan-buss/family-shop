@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using ShopApi.Models;
 using System;
@@ -14,7 +13,6 @@ namespace ShopApi.Controllers
     // Personal controller retrieves your own list items.
     [Authorize]
     [Route("api/[controller]")]
-    [ApiController]
     public class PersonalController : ControllerBase
     {
         private readonly FamilyShopContext _context;

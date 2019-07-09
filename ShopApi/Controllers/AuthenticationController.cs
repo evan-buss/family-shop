@@ -1,8 +1,8 @@
-using System;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using ShopApi.Models;
 using ShopApi.Services;
+using System;
 
 namespace ShopApi.Controllers
 {
@@ -24,6 +24,7 @@ namespace ShopApi.Controllers
         [HttpPost]
         public IActionResult SignIn(string email, string password)
         {
+            Console.WriteLine("email: " + email + "  pass: " + password);
             var user = _context.Users.Find(email);
             if (user == null)
             {
@@ -47,6 +48,8 @@ namespace ShopApi.Controllers
         [HttpPost]
         public async Task<IActionResult> SignUp(string username, string password, string email)
         {
+
+            Console.WriteLine("user: " + username + "  pass: " + password + " email: " + email);
             // 1. Ensure email isn't used
             if (!_authService.emailAvailable(email))
             {

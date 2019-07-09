@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Collections.Generic;
 
 namespace ShopApi.Models
@@ -6,7 +7,9 @@ namespace ShopApi.Models
     {
         public long familyID { get; set; }
         public string name { get; set; }
-
+        // Admin is the "head" of the family that manages their lists
+        [ForeignKey("User")]
+        public long adminUserID { get; set; }
         public ICollection<List> lists { get; set; }
     }
 }
