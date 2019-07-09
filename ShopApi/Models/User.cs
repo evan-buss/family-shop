@@ -10,6 +10,8 @@ namespace ShopApi.Models
         public string passwordHash { get; set; }
         public byte[] passwordSalt { get; set; }
 
+        public Family family { get; set; }
+
         public User() { }
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ShopApi.Models;
@@ -9,9 +10,10 @@ using ShopApi.Models;
 namespace ShopApi.Migrations
 {
     [DbContext(typeof(FamilyShopContext))]
-    partial class FamilyShopContextModelSnapshot : ModelSnapshot
+    [Migration("20190709014619_list_add")]
+    partial class list_add
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -54,19 +56,13 @@ namespace ShopApi.Migrations
                     b.Property<long>("itemID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<long?>("ListID");
-
                     b.Property<string>("description");
 
                     b.Property<string>("title");
 
-                    b.Property<string>("useremail");
+                    b.Property<long>("userID");
 
                     b.HasKey("itemID");
-
-                    b.HasIndex("ListID");
-
-                    b.HasIndex("useremail");
 
                     b.ToTable("ListItems");
                 });
@@ -96,17 +92,6 @@ namespace ShopApi.Migrations
                     b.HasOne("ShopApi.Models.Family", "family")
                         .WithMany("lists")
                         .HasForeignKey("familyID");
-                });
-
-            modelBuilder.Entity("ShopApi.Models.ListItem", b =>
-                {
-                    b.HasOne("ShopApi.Models.List", "list")
-                        .WithMany()
-                        .HasForeignKey("ListID");
-
-                    b.HasOne("ShopApi.Models.User", "user")
-                        .WithMany()
-                        .HasForeignKey("useremail");
                 });
 
             modelBuilder.Entity("ShopApi.Models.User", b =>

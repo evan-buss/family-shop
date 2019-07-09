@@ -7,18 +7,10 @@ namespace ShopApi.Models
     {
         [Key]
         public long itemID { get; set; }
-
         public string title { get; set; }
-
         public string description { get; set; }
-
-        public long userID { get; set; }
-
-        public ListItem()
-        {
-            title = "Default Title";
-            description = "Default Description";
-            userID = 28;
-        }
+        public List list { get; set; }
+        public User user { get; set; }
+        public ListItem() { }
     }
 }

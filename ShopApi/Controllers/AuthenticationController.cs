@@ -70,8 +70,8 @@ namespace ShopApi.Controllers
             var salt = generateSalt();
             // 4. Hash salt+password
             var hashedPassword = hashPassword(salt, password);
+
             // 5. Store both in the database
-            // 6. Return new valid JWT
             var newUser = new User()
             {
                 username = username,
@@ -81,6 +81,7 @@ namespace ShopApi.Controllers
             };
             _context.Add(newUser);
             await _context.SaveChangesAsync();
+            // 6. Return new valid JWT
             return new ObjectResult(GenerateToken(email));
         }
 
