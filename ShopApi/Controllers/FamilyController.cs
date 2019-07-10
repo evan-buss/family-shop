@@ -1,5 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Security.Claims;
+
 
 using ShopApi.Models;
 using ShopApi.Services;
@@ -22,8 +26,11 @@ namespace ShopApi.Controllers
 
         // Return all members of the user's family
         [HttpGet]
-        public IActionResult GetMembers() {
-            return Ok("it works..");
+        public IEnumerable<User> GetMembers() {
+
+            var email = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var memberList = _service.GetMembers(email);
+            return memberList;   
         }
 
         [HttpPost("create")]

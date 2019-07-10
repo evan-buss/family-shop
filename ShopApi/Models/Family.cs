@@ -8,8 +8,8 @@ namespace ShopApi.Models
         public long familyID { get; set; }
         public string name { get; set; }
         // Admin is the "head" of the family that manages their lists
-        [ForeignKey("User")]
-        public long adminUserID { get; set; }
+        [ForeignKey("adminID")]
+        public User admin { get; set; }
         public ICollection<List> lists { get; set; }
     }
 }
