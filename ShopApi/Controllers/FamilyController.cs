@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Security.Claims;
+using System;
 
 
 using ShopApi.Models;
@@ -22,21 +23,43 @@ namespace ShopApi.Controllers
         {
             _context = context;
             _service = new FamilyService(_context);
+
         }
 
         // Return all members of the user's family
-        [HttpGet]
-        public IEnumerable<User> GetMembers() {
-
+        [HttpGet("members")]
+        public IEnumerable<User> GetMembers()
+        {
             var email = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var memberList = _service.GetMembers(email);
-            return memberList;   
+            return memberList;
         }
 
-        [HttpPost("create")]
-        public IActionResult CreateFamily()
+        [HttpGet]
+        public ActionResult<Family> GetFamily()
         {
-            return Ok();
+            Console.WriteLine("EMAIL: " + User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            var family = _service.GetFamily(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            if (family != null)
+            {  
+                Console.WriteLine("RETURNING FAMILY");
+                return family;
+            }
+
+            Console.WriteLine("FAMILY IS NULL");
+            return BadRequest();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateFamily([FromBody] string name)
+        {
+            var success = await _service.CreateFamily(getEmail(), name);
+            if (success)
+            {
+                return Ok();
+            }
+
+            return BadRequest();
         }
 
         [HttpPut("join/{id}")]
@@ -55,6 +78,11 @@ namespace ShopApi.Controllers
         public IActionResult TransferAdmin([FromBody] long userID)
         {
             return Ok(userID);
+        }
+
+        private string getEmail()
+        {
+            return User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         }
     }
 }

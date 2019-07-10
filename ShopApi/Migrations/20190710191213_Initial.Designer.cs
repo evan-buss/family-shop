@@ -10,8 +10,8 @@ using ShopApi.Models;
 namespace ShopApi.Migrations
 {
     [DbContext(typeof(FamilyShopContext))]
-    [Migration("20190709015040_update_listitem")]
-    partial class update_listitem
+    [Migration("20190710191213_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -26,11 +26,15 @@ namespace ShopApi.Migrations
                     b.Property<long>("familyID")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("adminID");
+
                     b.Property<string>("name");
 
                     b.HasKey("familyID");
 
-                    b.ToTable("Family");
+                    b.HasIndex("adminID");
+
+                    b.ToTable("Families");
                 });
 
             modelBuilder.Entity("ShopApi.Models.List", b =>
@@ -48,7 +52,7 @@ namespace ShopApi.Migrations
 
                     b.HasIndex("familyID");
 
-                    b.ToTable("List");
+                    b.ToTable("Lists");
                 });
 
             modelBuilder.Entity("ShopApi.Models.ListItem", b =>
@@ -91,6 +95,13 @@ namespace ShopApi.Migrations
                     b.HasIndex("familyID");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("ShopApi.Models.Family", b =>
+                {
+                    b.HasOne("ShopApi.Models.User", "admin")
+                        .WithMany()
+                        .HasForeignKey("adminID");
                 });
 
             modelBuilder.Entity("ShopApi.Models.List", b =>

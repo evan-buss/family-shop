@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using ShopApi.Models;
+using ShopApi.Helpers;
 
 namespace ShopApi
 {
@@ -28,9 +29,14 @@ namespace ShopApi
             services.AddDbContext<FamilyShopContext>(opt =>
                 opt.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"))
             );
+            
+            // Load Appsettings from appsettings.json "AppSettings" block
+            var appSettingsSection = Configuration.GetSection("AppSettings");
+            // services.Configure<AppSettings>(appSettingsSection);
 
-            // configure jwt authentication
-            var key = "the secret that needs to be at least 16 characters long for HmacSha256bytes";
+            var appSettings = appSettingsSection.Get<AppSettings>();
+            var key = Encoding.ASCII.GetBytes(AppSettings.Secret);
+
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -43,7 +49,7 @@ namespace ShopApi
                 x.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateLifetime = true,
                     ValidateIssuer = false,
                     ValidateAudience = false

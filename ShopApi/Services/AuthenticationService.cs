@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System.Collections.Generic;
 using System.Text;
 using System;
+using ShopApi.Helpers;
 
 namespace ShopApi.Services
 {
@@ -49,7 +50,7 @@ namespace ShopApi.Services
             return salt;
         }
 
-        // Generate a securely hashed password
+        // Generate a securely hashed password using a salt
         public string hashPassword(byte[] salt, string password)
         {
             // derive a 256-bit subkey (use HMACSHA1 with 10,000 iterations)
@@ -66,14 +67,14 @@ namespace ShopApi.Services
         public string GenerateToken(string username)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes("the secret that needs to be at least 16 characters long for HmacSha256bytes");
+            var key = Encoding.ASCII.GetBytes(AppSettings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
                     new Claim(ClaimTypes.NameIdentifier, username)
                 }),
-                Expires = DateTime.UtcNow.AddMinutes(1),
+                Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);

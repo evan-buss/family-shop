@@ -11,7 +11,6 @@ namespace ShopApi.Models
         public string email { get; set; }
         public string passwordHash { get; set; }
         public byte[] passwordSalt { get; set; }
-        [ForeignKey("familyID")]
         public Family family { get; set; }
 
         public User() { }

@@ -10,8 +10,8 @@ using ShopApi.Models;
 namespace ShopApi.Migrations
 {
     [DbContext(typeof(FamilyShopContext))]
-    [Migration("20190709014619_list_add")]
-    partial class list_add
+    [Migration("20190710200554_M_2")]
+    partial class M_2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -26,11 +26,13 @@ namespace ShopApi.Migrations
                     b.Property<long>("familyID")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("adminID");
+
                     b.Property<string>("name");
 
                     b.HasKey("familyID");
 
-                    b.ToTable("Family");
+                    b.ToTable("Families");
                 });
 
             modelBuilder.Entity("ShopApi.Models.List", b =>
@@ -48,7 +50,7 @@ namespace ShopApi.Migrations
 
                     b.HasIndex("familyID");
 
-                    b.ToTable("List");
+                    b.ToTable("Lists");
                 });
 
             modelBuilder.Entity("ShopApi.Models.ListItem", b =>
@@ -56,13 +58,19 @@ namespace ShopApi.Migrations
                     b.Property<long>("itemID")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<long?>("ListID");
+
                     b.Property<string>("description");
 
                     b.Property<string>("title");
 
-                    b.Property<long>("userID");
+                    b.Property<string>("useremail");
 
                     b.HasKey("itemID");
+
+                    b.HasIndex("ListID");
+
+                    b.HasIndex("useremail");
 
                     b.ToTable("ListItems");
                 });
@@ -92,6 +100,17 @@ namespace ShopApi.Migrations
                     b.HasOne("ShopApi.Models.Family", "family")
                         .WithMany("lists")
                         .HasForeignKey("familyID");
+                });
+
+            modelBuilder.Entity("ShopApi.Models.ListItem", b =>
+                {
+                    b.HasOne("ShopApi.Models.List", "list")
+                        .WithMany()
+                        .HasForeignKey("ListID");
+
+                    b.HasOne("ShopApi.Models.User", "user")
+                        .WithMany()
+                        .HasForeignKey("useremail");
                 });
 
             modelBuilder.Entity("ShopApi.Models.User", b =>

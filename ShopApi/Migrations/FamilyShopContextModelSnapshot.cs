@@ -30,8 +30,6 @@ namespace ShopApi.Migrations
 
                     b.HasKey("familyID");
 
-                    b.HasIndex("adminID");
-
                     b.ToTable("Families");
                 });
 
@@ -93,13 +91,6 @@ namespace ShopApi.Migrations
                     b.HasIndex("familyID");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("ShopApi.Models.Family", b =>
-                {
-                    b.HasOne("ShopApi.Models.User", "admin")
-                        .WithMany()
-                        .HasForeignKey("adminID");
                 });
 
             modelBuilder.Entity("ShopApi.Models.List", b =>
