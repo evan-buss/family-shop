@@ -1,4 +1,6 @@
 import 'package:family_list/screens/auth_screen.dart';
+import 'package:family_list/screens/login_screen.dart';
+import 'package:family_list/screens/signup_screen.dart';
 import 'package:family_list/widgets/picture_card.dart';
 import 'package:flutter/material.dart';
 
@@ -7,18 +9,24 @@ import 'package:flutter/material.dart';
 class FirstScreen extends StatelessWidget {
   const FirstScreen();
 
-  Widget _stepCard(int step, String text, IconData icon, Function onTap) {
+  Widget _stepCard(String text, IconData icon, Function onTap, {bool halfsize = false}) {
+    
+    var _margins =  EdgeInsets.only(top: 8, bottom: 8, left: 16, right: 16);
+    if (halfsize) {
+      _margins = EdgeInsets.only(top: 8, bottom: 8, left: 16);
+    }
+
     return Card(
       elevation: 4,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
-      margin: EdgeInsets.only(top: 8, bottom: 8, left: 16, right: 16),
+      margin: _margins,
       // FIXME: The inkwell overlaps the border radius...
       child: InkWell(
         onTap: onTap,
         child: Padding(
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.all(18),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
@@ -26,12 +34,13 @@ class FirstScreen extends StatelessWidget {
                 padding: const EdgeInsets.only(right: 8.0),
                 child: Icon(icon),
               ),
-              Expanded(
-                  child: Text(
-                text,
-                softWrap: true,
-                textAlign: TextAlign.center,
-              ))
+              Center(
+                child: Text(
+                  text,
+                  softWrap: true,
+                  textAlign: TextAlign.left,
+                ),
+              )
             ],
           ),
         ),
@@ -43,16 +52,32 @@ class FirstScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView(
       children: <Widget>[
-        PictureCard(text: "Welcome to Family Shop", assetString: "assets/images/cart.png",),
-        _stepCard(1, "Create an account or log in", Icons.account_box, () {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => AuthScreen()));
-        }),
-        _stepCard(2, "Create a family", Icons.people, () {
+        PictureCard(
+          text: "Welcome to Family Shop",
+          assetString: "assets/images/cart.png",
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Expanded(
+              child: _stepCard("Create Account", Icons.create, () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => SignupScreen()));
+              }, halfsize: true),
+            ),
+            Expanded(
+              child: _stepCard("Log In", Icons.account_box, () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => LoginScreen()));
+              }),
+            ),
+          ],
+        ),
+        _stepCard("Create a family", Icons.people, () {
           print("Creating family");
         }),
-        _stepCard(
-            3, "Invite members to your family to share lists.", Icons.list, () {
+        _stepCard("Invite members to your family to share lists.", Icons.list,
+            () {
           print("Inviting peoples");
         })
       ],
