@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ShopApi.Models;
@@ -9,9 +10,10 @@ using ShopApi.Models;
 namespace ShopApi.Migrations
 {
     [DbContext(typeof(FamilyShopContext))]
-    partial class FamilyShopContextModelSnapshot : ModelSnapshot
+    [Migration("20190729194845_mon_3_48pm")]
+    partial class mon_3_48pm
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,13 +26,9 @@ namespace ShopApi.Migrations
                     b.Property<long>("familyID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<long?>("adminID");
-
                     b.Property<string>("name");
 
                     b.HasKey("familyID");
-
-                    b.HasIndex("adminID");
 
                     b.ToTable("Families");
                 });
@@ -80,9 +78,9 @@ namespace ShopApi.Migrations
                     b.Property<long>("userID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("email");
+                    b.Property<long?>("adminID");
 
-                    b.Property<long?>("familyID");
+                    b.Property<string>("email");
 
                     b.Property<string>("passwordHash");
 
@@ -92,16 +90,10 @@ namespace ShopApi.Migrations
 
                     b.HasKey("userID");
 
-                    b.HasIndex("familyID");
+                    b.HasIndex("adminID")
+                        .IsUnique();
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("ShopApi.Models.Private.Family", b =>
-                {
-                    b.HasOne("ShopApi.Models.Private.User", "admin")
-                        .WithMany()
-                        .HasForeignKey("adminID");
                 });
 
             modelBuilder.Entity("ShopApi.Models.Private.List", b =>
@@ -126,8 +118,8 @@ namespace ShopApi.Migrations
             modelBuilder.Entity("ShopApi.Models.Private.User", b =>
                 {
                     b.HasOne("ShopApi.Models.Private.Family", "family")
-                        .WithMany()
-                        .HasForeignKey("familyID");
+                        .WithOne("admin")
+                        .HasForeignKey("ShopApi.Models.Private.User", "adminID");
                 });
 #pragma warning restore 612, 618
         }

@@ -31,10 +31,10 @@ namespace ShopApi.Controllers
 
         // GET api/personal
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ListItem>>> GetListItems()
+        public ActionResult<List<Models.Public.Response.Item>> GetListItems()
         {
-            Console.WriteLine(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            return await _context.ListItems.ToListAsync();
+            string user = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            return new ObjectResult(_service.GetPersonalItems(user));
         }
 
         // GET api/personal/2

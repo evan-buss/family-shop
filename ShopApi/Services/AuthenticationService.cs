@@ -64,7 +64,7 @@ namespace ShopApi.Services
         }
 
         // Generate a JWT token...
-        public string GenerateToken(string username)
+        public string GenerateToken(string identifier)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(AppSettings.Secret);
@@ -72,7 +72,7 @@ namespace ShopApi.Services
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.NameIdentifier, username)
+                    new Claim(ClaimTypes.NameIdentifier, identifier)
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

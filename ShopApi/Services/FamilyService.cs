@@ -34,7 +34,7 @@ namespace ShopApi.Services
             // User was found and user doesn't already have a family
             if (user != null && user.family == null) 
             {
-                var family = new ShopApi.Models.Private.Family { adminID = user.userID, name = familyName};
+                var family = new ShopApi.Models.Private.Family { admin = user, name = familyName};
                 _context.Add(family);
                 user.family = family;
                 await _context.SaveChangesAsync();

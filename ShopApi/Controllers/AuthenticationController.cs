@@ -4,6 +4,7 @@ using ShopApi.Models.Private;
 using ShopApi.Models;
 using ShopApi.Services;
 using System;
+using System.Linq;
 
 namespace ShopApi.Controllers
 {
@@ -26,14 +27,15 @@ namespace ShopApi.Controllers
         public IActionResult SignIn(string email, string password)
         {
             Console.WriteLine("email: " + email + "  pass: " + password);
-            var user = _context.Users.Find(email);
+            // Search for the given email in the Users table
+            var user = _context.Users.Where(q => q.email == email).FirstOrDefault();
             if (user == null)
             {
                 return BadRequest("Invalid email or password");
             }
             if (_authService.hashPassword(user.passwordSalt, password) == user.passwordHash)
             {
-                return new ObjectResult(_authService.GenerateToken(email));
+                return new ObjectResult(_authService.GenerateToken(user.userID.ToString()));
             }
             return BadRequest("Invalid username or password.");
         }
@@ -77,7 +79,7 @@ namespace ShopApi.Controllers
             _context.Add(newUser);
             await _context.SaveChangesAsync();
             // 6. Return new valid JWT
-            return new ObjectResult(_authService.GenerateToken(email));
+            return new ObjectResult(_authService.GenerateToken(newUser.userID.ToString()));
         }
     }
 }

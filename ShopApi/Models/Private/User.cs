@@ -13,7 +13,7 @@ namespace ShopApi.Models.Private
         public string passwordHash { get; set; }
         public byte[] passwordSalt { get; set; }
 
-        public long familyId { get; set; }
+        // public long familyID { get; set; }
 
         [ForeignKey("familyID")]
         public Family family { get; set; }

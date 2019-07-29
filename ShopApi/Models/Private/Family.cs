@@ -11,8 +11,7 @@ namespace ShopApi.Models.Private
         public string name { get; set; }
         // Admin is the "head" of the family that manages their lists
 
-
-        public long adminID { get; set; }
+        // public long adminID { get; set; }
 
         [ForeignKey("adminID")]
         public User admin { get; set; }

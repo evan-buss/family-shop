@@ -10,8 +10,8 @@ using ShopApi.Models;
 namespace ShopApi.Migrations
 {
     [DbContext(typeof(FamilyShopContext))]
-    [Migration("20190729190116_mon_3pm")]
-    partial class mon_3pm
+    [Migration("20190729191303_mon_3_12pm")]
+    partial class mon_3_12pm
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -39,7 +39,7 @@ namespace ShopApi.Migrations
 
             modelBuilder.Entity("ShopApi.Models.Private.List", b =>
                 {
-                    b.Property<long>("ListID")
+                    b.Property<long>("listID")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("description");
@@ -48,7 +48,7 @@ namespace ShopApi.Migrations
 
                     b.Property<string>("name");
 
-                    b.HasKey("ListID");
+                    b.HasKey("listID");
 
                     b.HasIndex("familyID");
 
@@ -60,9 +60,9 @@ namespace ShopApi.Migrations
                     b.Property<long>("itemID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<long?>("ListID");
-
                     b.Property<string>("description");
+
+                    b.Property<long?>("listID");
 
                     b.Property<string>("title");
 
@@ -70,7 +70,7 @@ namespace ShopApi.Migrations
 
                     b.HasKey("itemID");
 
-                    b.HasIndex("ListID");
+                    b.HasIndex("listID");
 
                     b.HasIndex("userID");
 
@@ -84,9 +84,7 @@ namespace ShopApi.Migrations
 
                     b.Property<string>("email");
 
-                    b.Property<long?>("familyID");
-
-                    b.Property<long>("familyId");
+                    b.Property<long>("familyID");
 
                     b.Property<string>("passwordHash");
 
@@ -120,7 +118,7 @@ namespace ShopApi.Migrations
                 {
                     b.HasOne("ShopApi.Models.Private.List", "list")
                         .WithMany()
-                        .HasForeignKey("ListID");
+                        .HasForeignKey("listID");
 
                     b.HasOne("ShopApi.Models.Private.User", "user")
                         .WithMany()
@@ -132,7 +130,8 @@ namespace ShopApi.Migrations
                 {
                     b.HasOne("ShopApi.Models.Private.Family", "family")
                         .WithMany()
-                        .HasForeignKey("familyID");
+                        .HasForeignKey("familyID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }
