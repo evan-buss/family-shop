@@ -19,21 +19,23 @@ namespace ShopApi.Migrations
                 .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            modelBuilder.Entity("ShopApi.Models.Family", b =>
+            modelBuilder.Entity("ShopApi.Models.Private.Family", b =>
                 {
                     b.Property<long>("familyID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("adminID");
+                    b.Property<long>("adminID");
 
                     b.Property<string>("name");
 
                     b.HasKey("familyID");
 
+                    b.HasIndex("adminID");
+
                     b.ToTable("Families");
                 });
 
-            modelBuilder.Entity("ShopApi.Models.List", b =>
+            modelBuilder.Entity("ShopApi.Models.Private.List", b =>
                 {
                     b.Property<long>("ListID")
                         .ValueGeneratedOnAdd();
@@ -51,7 +53,7 @@ namespace ShopApi.Migrations
                     b.ToTable("Lists");
                 });
 
-            modelBuilder.Entity("ShopApi.Models.ListItem", b =>
+            modelBuilder.Entity("ShopApi.Models.Private.ListItem", b =>
                 {
                     b.Property<long>("itemID")
                         .ValueGeneratedOnAdd();
@@ -62,23 +64,27 @@ namespace ShopApi.Migrations
 
                     b.Property<string>("title");
 
-                    b.Property<string>("useremail");
+                    b.Property<long>("userID");
 
                     b.HasKey("itemID");
 
                     b.HasIndex("ListID");
 
-                    b.HasIndex("useremail");
+                    b.HasIndex("userID");
 
                     b.ToTable("ListItems");
                 });
 
-            modelBuilder.Entity("ShopApi.Models.User", b =>
+            modelBuilder.Entity("ShopApi.Models.Private.User", b =>
                 {
-                    b.Property<string>("email")
+                    b.Property<long>("userID")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("email");
+
                     b.Property<long?>("familyID");
+
+                    b.Property<long>("familyId");
 
                     b.Property<string>("passwordHash");
 
@@ -86,34 +92,43 @@ namespace ShopApi.Migrations
 
                     b.Property<string>("username");
 
-                    b.HasKey("email");
+                    b.HasKey("userID");
 
                     b.HasIndex("familyID");
 
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("ShopApi.Models.List", b =>
+            modelBuilder.Entity("ShopApi.Models.Private.Family", b =>
                 {
-                    b.HasOne("ShopApi.Models.Family", "family")
+                    b.HasOne("ShopApi.Models.Private.User", "admin")
+                        .WithMany()
+                        .HasForeignKey("adminID")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("ShopApi.Models.Private.List", b =>
+                {
+                    b.HasOne("ShopApi.Models.Private.Family", "family")
                         .WithMany("lists")
                         .HasForeignKey("familyID");
                 });
 
-            modelBuilder.Entity("ShopApi.Models.ListItem", b =>
+            modelBuilder.Entity("ShopApi.Models.Private.ListItem", b =>
                 {
-                    b.HasOne("ShopApi.Models.List", "list")
+                    b.HasOne("ShopApi.Models.Private.List", "list")
                         .WithMany()
                         .HasForeignKey("ListID");
 
-                    b.HasOne("ShopApi.Models.User", "user")
+                    b.HasOne("ShopApi.Models.Private.User", "user")
                         .WithMany()
-                        .HasForeignKey("useremail");
+                        .HasForeignKey("userID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("ShopApi.Models.User", b =>
+            modelBuilder.Entity("ShopApi.Models.Private.User", b =>
                 {
-                    b.HasOne("ShopApi.Models.Family", "family")
+                    b.HasOne("ShopApi.Models.Private.Family", "family")
                         .WithMany()
                         .HasForeignKey("familyID");
                 });

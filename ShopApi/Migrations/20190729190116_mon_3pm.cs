@@ -4,24 +4,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace ShopApi.Migrations
 {
-    public partial class FirstMigration : Migration
+    public partial class mon_3pm : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Families",
-                columns: table => new
-                {
-                    familyID = table.Column<long>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    name = table.Column<string>(nullable: true),
-                    adminID = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Families", x => x.familyID);
-                });
-
             migrationBuilder.CreateTable(
                 name: "Lists",
                 columns: table => new
@@ -35,33 +21,44 @@ namespace ShopApi.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Lists", x => x.ListID);
-                    table.ForeignKey(
-                        name: "FK_Lists_Families_familyID",
-                        column: x => x.familyID,
-                        principalTable: "Families",
-                        principalColumn: "familyID",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
-                    email = table.Column<string>(nullable: false),
+                    userID = table.Column<long>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     username = table.Column<string>(nullable: true),
+                    email = table.Column<string>(nullable: true),
                     passwordHash = table.Column<string>(nullable: true),
                     passwordSalt = table.Column<byte[]>(nullable: true),
+                    familyId = table.Column<long>(nullable: false),
                     familyID = table.Column<long>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.email);
+                    table.PrimaryKey("PK_Users", x => x.userID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Families",
+                columns: table => new
+                {
+                    familyID = table.Column<long>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    name = table.Column<string>(nullable: true),
+                    adminID = table.Column<long>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Families", x => x.familyID);
                     table.ForeignKey(
-                        name: "FK_Users_Families_familyID",
-                        column: x => x.familyID,
-                        principalTable: "Families",
-                        principalColumn: "familyID",
-                        onDelete: ReferentialAction.Restrict);
+                        name: "FK_Families_Users_adminID",
+                        column: x => x.adminID,
+                        principalTable: "Users",
+                        principalColumn: "userID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -73,7 +70,7 @@ namespace ShopApi.Migrations
                     title = table.Column<string>(nullable: true),
                     description = table.Column<string>(nullable: true),
                     ListID = table.Column<long>(nullable: true),
-                    useremail = table.Column<string>(nullable: true)
+                    userID = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -85,12 +82,17 @@ namespace ShopApi.Migrations
                         principalColumn: "ListID",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_ListItems_Users_useremail",
-                        column: x => x.useremail,
+                        name: "FK_ListItems_Users_userID",
+                        column: x => x.userID,
                         principalTable: "Users",
-                        principalColumn: "email",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "userID",
+                        onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Families_adminID",
+                table: "Families",
+                column: "adminID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ListItems_ListID",
@@ -98,9 +100,9 @@ namespace ShopApi.Migrations
                 column: "ListID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ListItems_useremail",
+                name: "IX_ListItems_userID",
                 table: "ListItems",
-                column: "useremail");
+                column: "userID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Lists_familyID",
@@ -111,10 +113,30 @@ namespace ShopApi.Migrations
                 name: "IX_Users_familyID",
                 table: "Users",
                 column: "familyID");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Lists_Families_familyID",
+                table: "Lists",
+                column: "familyID",
+                principalTable: "Families",
+                principalColumn: "familyID",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Users_Families_familyID",
+                table: "Users",
+                column: "familyID",
+                principalTable: "Families",
+                principalColumn: "familyID",
+                onDelete: ReferentialAction.Restrict);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Families_Users_adminID",
+                table: "Families");
+
             migrationBuilder.DropTable(
                 name: "ListItems");
 

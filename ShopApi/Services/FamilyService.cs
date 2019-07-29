@@ -17,7 +17,7 @@ namespace ShopApi.Services
             _context = context;
         }
 
-        public IEnumerable<User> GetMembers(string email)
+        public IEnumerable<ShopApi.Models.Private.User> GetMembers(string email)
         {
             var user = _context.Users.Where(q => q.email == email).FirstOrDefault();
             if (user != null)
@@ -34,7 +34,7 @@ namespace ShopApi.Services
             // User was found and user doesn't already have a family
             if (user != null && user.family == null) 
             {
-                var family = new Family { adminID = user.email, name = familyName};
+                var family = new ShopApi.Models.Private.Family { adminID = user.userID, name = familyName};
                 _context.Add(family);
                 user.family = family;
                 await _context.SaveChangesAsync();
@@ -44,7 +44,7 @@ namespace ShopApi.Services
             return false;
         }
 
-        public Family GetFamily(string email) 
+        public ShopApi.Models.Private.Family GetFamily(string email) 
         {
             return _context.Users.Find(email)?.family;
         }

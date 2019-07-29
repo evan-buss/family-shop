@@ -7,6 +7,7 @@ using System;
 
 
 using ShopApi.Models;
+using ShopApi.Models.Private;
 using ShopApi.Services;
 
 

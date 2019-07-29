@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ShopApi.Models
+namespace ShopApi.Models.Private
 {
     // ListItem represents an individual item in a user's list
     public class ListItem
@@ -10,7 +11,10 @@ namespace ShopApi.Models
         public string title { get; set; }
         public string description { get; set; }
         public List list { get; set; }
+
+        public long userID { get; set;}
+
+        [ForeignKey("userID")]
         public User user { get; set; }
-        public ListItem() { }
     }
 }

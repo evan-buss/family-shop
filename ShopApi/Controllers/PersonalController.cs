@@ -2,10 +2,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using ShopApi.Models;
 using System;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+
+using ShopApi.Services;
+
+using ShopApi.Models;
+using ShopApi.Models.Private;
 
 
 namespace ShopApi.Controllers
@@ -16,10 +20,13 @@ namespace ShopApi.Controllers
     public class PersonalController : ControllerBase
     {
         private readonly FamilyShopContext _context;
+        private readonly PersonalService _service;
+
 
         public PersonalController(FamilyShopContext context)
         {
             _context = context;
+            _service = new PersonalService(_context);
         }
 
         // GET api/personal
@@ -46,16 +53,14 @@ namespace ShopApi.Controllers
 
         // POST api/personal
         [HttpPost]
-        public async Task<ActionResult<IEnumerable<ListItem>>> PostListItem(ListItem item)
+        public async Task<ActionResult<IEnumerable<ListItem>>> PostListItem([FromBody] Models.Public.Item item)
         {
-            Console.WriteLine("TITLE:" + item.title);
-            _context.ListItems.Add(item);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetListItem), new { id = item.itemID }, item);
+            Models.Public.Response.Item newItem = await _service.AddPersonalItem(item, User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            
+            return CreatedAtAction(nameof(GetListItem), new { id = newItem.itemID }, newItem);
         }
 
-        // DELETE api/personal/3
+        // DELETE api/personal/3Item
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteListItem(long id)
         {

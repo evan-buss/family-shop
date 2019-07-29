@@ -1,4 +1,4 @@
-namespace ShopApi.Models
+namespace ShopApi.Models.Private
 {
     public class List
     {
