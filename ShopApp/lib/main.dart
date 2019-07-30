@@ -1,6 +1,7 @@
 import 'package:family_list/redux/state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:redux/redux.dart';
 import 'package:family_list/redux/reducers.dart';
 import 'package:http/http.dart' as http;
@@ -75,6 +76,23 @@ class _PageContainerState extends State<PageContainer> {
     _pageController.jumpToPage(page);
   }
 
+  void _createItem() async {
+    var storage = FlutterSecureStorage();
+    var item = new ListItem(
+      description: "FAB",
+      title: DateTime.now().toString(),
+    );
+    final response = await http.post(personalListURL,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + await storage.read(key: "token")
+        },
+        body: json.encode(item.toJson()));
+
+    print(json.encode(item.toJson()));
+    print('Response status ${response.statusCode}');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -96,7 +114,7 @@ class _PageContainerState extends State<PageContainer> {
         controller: _pageController,
       ),
       drawer: Drawer(
-        child: Text("welcome"),
+        child: AppDrawer(),
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _activePage,
@@ -122,20 +140,52 @@ class _PageContainerState extends State<PageContainer> {
         child: FloatingActionButton(
           tooltip: 'New Item',
           child: Icon(Icons.add),
-          onPressed: () async {
-            var item = new ListItem(
-                description: "FAB",
-                title: DateTime.now().toString(),
-                userID: 28);
-            final response = await http.post(personalListURL,
-                headers: {"Content-Type": "application/json"},
-                body: json.encode(item.toJson()));
-
-            print(json.encode(item.toJson()));
-            print('Response status ${response.statusCode}');
-          },
+          onPressed: _createItem,
         ),
       ),
+    );
+  }
+}
+
+class AppDrawer extends StatelessWidget {
+  AppDrawer();
+
+  final storage = new FlutterSecureStorage();
+// Icon
+// Name
+// Family
+// ------------
+// *family names*
+// ------------
+// Log out
+// Settings
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      padding: EdgeInsets.zero,
+      children: <Widget>[
+        DrawerHeader(
+          child: Text(
+            "Good afternoon, Evan",
+            style: TextStyle(fontFamily: "ProductSans", fontSize: 30, color: Colors.white),
+          ),
+          decoration: BoxDecoration(color: Colors.blue
+              // gradient: LinearGradient(
+              //   colors: [Colors.blue, Colors.black],
+              // ),
+              ),
+        ),
+        ListTile(
+          title: Text("Family"),
+        ),
+        ListTile(
+          title: Text("Log Out"),
+        ),
+        ListTile(
+          title: Text("Settings"),
+        ),
+      ],
     );
   }
 }

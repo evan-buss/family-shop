@@ -9,9 +9,9 @@ import 'package:flutter/material.dart';
 class FirstScreen extends StatelessWidget {
   const FirstScreen();
 
-  Widget _stepCard(String text, IconData icon, Function onTap, {bool halfsize = false}) {
-    
-    var _margins =  EdgeInsets.only(top: 8, bottom: 8, left: 16, right: 16);
+  Widget _stepCard(String text, IconData icon, Function onTap,
+      {bool halfsize = false}) {
+    var _margins = EdgeInsets.only(top: 8, bottom: 8, left: 16, right: 16);
     if (halfsize) {
       _margins = EdgeInsets.only(top: 8, bottom: 8, left: 16);
     }
@@ -24,23 +24,22 @@ class FirstScreen extends StatelessWidget {
       margin: _margins,
       // FIXME: The inkwell overlaps the border radius...
       child: InkWell(
+        borderRadius: BorderRadius.circular(16),
         onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.all(18),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.only(right: 8.0),
                 child: Icon(icon),
               ),
-              Center(
-                child: Text(
-                  text,
-                  softWrap: true,
-                  textAlign: TextAlign.left,
-                ),
-              )
+              Text(
+                text,
+                softWrap: true,
+                textAlign: TextAlign.left,
+              ),
             ],
           ),
         ),
