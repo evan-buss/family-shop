@@ -1,4 +1,5 @@
 import 'package:family_list/redux/state.dart';
+import 'package:family_list/util/net.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -76,8 +77,8 @@ class _PageContainerState extends State<PageContainer> {
     _pageController.jumpToPage(page);
   }
 
+  // Create a new item, depending on the current page it makes different API calls
   void _createItem() async {
-    var storage = FlutterSecureStorage();
     var item = new ListItem(
       description: "FAB",
       title: DateTime.now().toString(),
@@ -85,7 +86,7 @@ class _PageContainerState extends State<PageContainer> {
     final response = await http.post(personalListURL,
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "Bearer " + await storage.read(key: "token")
+          "Authorization": await getAuthToken()
         },
         body: json.encode(item.toJson()));
 
@@ -103,7 +104,7 @@ class _PageContainerState extends State<PageContainer> {
         onPageChanged: (int page) {
           setState(() {
             _activePage = page;
-            if (_activePage == 1) {
+            if (_activePage == 1 || _activePage == 2) {
               _fabIsVisible = true;
             } else {
               _fabIsVisible = false;
@@ -147,10 +148,10 @@ class _PageContainerState extends State<PageContainer> {
   }
 }
 
+// App Drawer that provides quick account information
 class AppDrawer extends StatelessWidget {
   AppDrawer();
 
-  final storage = new FlutterSecureStorage();
 // Icon
 // Name
 // Family
@@ -160,21 +161,40 @@ class AppDrawer extends StatelessWidget {
 // Log out
 // Settings
 
+  Future<String> getName() async {
+    final storage = FlutterSecureStorage();
+    var name = await storage.read(key: "username");
+    name = name.split(" ")[0];
+    return "Greetings, " + name;
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView(
       padding: EdgeInsets.zero,
       children: <Widget>[
         DrawerHeader(
-          child: Text(
-            "Good afternoon, Evan",
-            style: TextStyle(fontFamily: "ProductSans", fontSize: 30, color: Colors.white),
-          ),
-          decoration: BoxDecoration(color: Colors.blue
-              // gradient: LinearGradient(
-              //   colors: [Colors.blue, Colors.black],
-              // ),
-              ),
+          child: FutureBuilder<String>(
+              future: getName(),
+              builder: (context, snapshot) {
+                if (snapshot.data != null) {
+                  return Text(
+                    snapshot.data,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: "ProductSans",
+                        fontSize: 30),
+                  );
+                }
+                return Text(
+                  "Please Sign In",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: "ProductSans",
+                      fontSize: 30),
+                );
+              }),
+          decoration: BoxDecoration(color: Colors.blue),
         ),
         ListTile(
           title: Text("Family"),

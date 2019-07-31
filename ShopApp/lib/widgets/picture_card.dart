@@ -1,7 +1,8 @@
+import 'package:family_list/util/text_styles.dart';
 import 'package:flutter/material.dart';
 
 /// PictureCard displays an image with text underneath it
-/// 
+///
 /// Requires a title string and an asset string for photo location
 class PictureCard extends StatelessWidget {
   final String text;
@@ -21,11 +22,7 @@ class PictureCard extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Image.asset(assetString),
-            Text(text,
-                style: TextStyle(
-                    fontSize: 18,
-                    fontFamily: "ProductSans",
-                    fontWeight: FontWeight.bold)),
+            Text(text, style: h3),
           ],
         )),
       ),

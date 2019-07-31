@@ -5,6 +5,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:family_list/util/urls.dart';
+import 'package:family_list/util/text_styles.dart' as text_styles;
 import 'package:family_list/widgets/form_fields.dart';
 import 'package:family_list/widgets/utils.dart';
 
@@ -67,8 +68,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               // Page Title
               Padding(
                 padding: const EdgeInsets.only(bottom: 32),
-                child: Text("New User Sign Up",
-                    style: TextStyle(fontFamily: "ProductSans", fontSize: 30)),
+                child: Text("New User Sign Up", style: text_styles.h2),
               ),
               // Name Section
               Padding(
@@ -77,7 +77,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   children: <Widget>[
                     Text(
                       "Full Name",
-                      style: TextStyle(fontFamily: "ProductSans", fontSize: 18),
+                      style: text_styles.h3,
                     ),
                     TextFormField(
                       autocorrect: false,

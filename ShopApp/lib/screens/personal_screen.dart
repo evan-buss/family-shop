@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:family_list/util/net.dart';
 import 'package:http/http.dart' as http;
 import 'package:family_list/models/ListItem.dart';
 import 'package:flutter/material.dart';
@@ -30,11 +30,12 @@ class _PersonalScreenState extends State<PersonalScreen> {
 
   // Retrieve the items associated with the logged in app user
   Future<List<ListItem>> retrievePersonalItems() async {
+    print("refresh");
     var response;
-    final storage = new FlutterSecureStorage();
+    var token = await getAuthToken();
     try {
       response = await http.get(personalListURL, headers: {
-        "Authorization": "Bearer " + await storage.read(key: "token")
+        "Authorization": token
       }).timeout(const Duration(seconds: 2));
     } on TimeoutException catch (_) {
       throw Exception("response timeout");

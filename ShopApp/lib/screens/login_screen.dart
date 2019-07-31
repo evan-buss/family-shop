@@ -1,10 +1,11 @@
 import 'package:family_list/models/AuthData.dart';
+import 'package:family_list/util/net.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:family_list/util/urls.dart';
 import 'package:family_list/widgets/form_fields.dart';
+import 'package:family_list/util/text_styles.dart' as text_styles;
 
 class LoginScreen extends StatefulWidget {
   LoginScreen({Key key}) : super(key: key);
@@ -37,9 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     print(response.statusCode);
     if (response.statusCode == 200) {
-      print(response.body);
-      final storage = new FlutterSecureStorage();
-      await storage.write(key: "token", value: response.body);
+      setAuthToken(response.body);
       Navigator.pop(context);
     }
   }
@@ -56,22 +55,18 @@ class _LoginScreenState extends State<LoginScreen> {
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.only(bottom: 32),
-                child: Text("Member Sign In",
-                    style: TextStyle(fontFamily: "ProductSans", fontSize: 30)),
+                child: Text("Member Sign In", style: text_styles.h2),
               ),
               Padding(
                 padding: EdgeInsets.only(bottom: 24),
                 child: Column(
                   children: <Widget>[
-                    Text("Email Address",
-                        style:
-                            TextStyle(fontFamily: "ProductSans", fontSize: 18)),
+                    Text("Email Address", style: text_styles.h3),
                     EmailField(_emailFocus, _passwordFocus, _data)
                   ],
                 ),
               ),
-              Text("Password",
-                  style: TextStyle(fontFamily: "ProductSans", fontSize: 18)),
+              Text("Password", style: text_styles.h3),
               PasswordField(_data, _passwordFocus),
               Padding(
                 padding: const EdgeInsets.only(top: 12),
