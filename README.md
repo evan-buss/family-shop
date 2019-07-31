@@ -1,16 +1,29 @@
-# family_list
+# family-shop
 
 A collaborative weekly shopping list for families.
 
-## Getting Started
+## Mobile Application
 
-This project is a starting point for a Flutter application.
+The mobile application is written in Dart using the Flutter framework from Google.
 
-A few resources to get you started if this is your first Flutter project:
+I decided to use Flutter because it is cross-compatible with both Android and IOS. This is my first real project with 
+flutter and I think it has real potential.
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+## Backend API
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.dev/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+The backend API is written in C# using the open-source .Net Core from Microsoft. .Net Core runs on both Windows and Linux
+and uses C# which is very similar to Java, making learning it very easy. I also like the Entity Framework which is used
+for ORM.
+
+## Deployment
+
+The API uses Docker containers to make it easy to deploy to a web server. The dev and production environments are exactly
+the same. There is a "shop_api" container which contains the server itself and it runs on port 5001. There is also a 
+separate container running a PostgreSQL server that the api persists data to. 
+
+## Docker Commands 
+- docker-compose build (build both images)
+- docker-compose up (run both containers)
+  - Access the API on localhost:5001
+- docker-compose down -v (remove old database volumes)
+  - You must remove the old volumes if you make any structural changes

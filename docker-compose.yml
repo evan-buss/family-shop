@@ -1,0 +1,36 @@
+version: '3.4'
+
+networks:
+  shopapi-dev:
+    driver: bridge
+
+services:
+  shop_api:
+    image: shop_api:latest
+    depends_on:
+      - "postgres"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5001:5001"
+    environment:
+      DB_CONNECTION_STRING: "host=postgres;port=5432;database=family-shop;username=evan;password=2842"
+    networks: 
+      - shopapi-dev
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_USER=evan
+      - POSTGRES_PASSWORD=2842
+      - POSTGRES_DB=family-shop
+    volumes:
+      - db_volume:/var/lib/postgresql/data
+      - ./ShopApi/scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+       - "5433:5432"
+    networks:
+      - shopapi-dev
+
+volumes:
+  db_volume:

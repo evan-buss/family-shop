@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace ShopApi.Migrations
 {
-    public partial class mon_3_12pm : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -33,7 +33,7 @@ namespace ShopApi.Migrations
                     email = table.Column<string>(nullable: true),
                     passwordHash = table.Column<string>(nullable: true),
                     passwordSalt = table.Column<byte[]>(nullable: true),
-                    familyID = table.Column<long>(nullable: false)
+                    familyID = table.Column<long>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -47,7 +47,7 @@ namespace ShopApi.Migrations
                     familyID = table.Column<long>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     name = table.Column<string>(nullable: true),
-                    adminID = table.Column<long>(nullable: false)
+                    adminID = table.Column<long>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -57,7 +57,7 @@ namespace ShopApi.Migrations
                         column: x => x.adminID,
                         principalTable: "Users",
                         principalColumn: "userID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -127,7 +127,7 @@ namespace ShopApi.Migrations
                 column: "familyID",
                 principalTable: "Families",
                 principalColumn: "familyID",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.Restrict);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

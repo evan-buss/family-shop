@@ -10,8 +10,8 @@ using ShopApi.Models;
 namespace ShopApi.Migrations
 {
     [DbContext(typeof(FamilyShopContext))]
-    [Migration("20190729191303_mon_3_12pm")]
-    partial class mon_3_12pm
+    [Migration("20190731191914_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -26,7 +26,7 @@ namespace ShopApi.Migrations
                     b.Property<long>("familyID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<long>("adminID");
+                    b.Property<long?>("adminID");
 
                     b.Property<string>("name");
 
@@ -84,7 +84,7 @@ namespace ShopApi.Migrations
 
                     b.Property<string>("email");
 
-                    b.Property<long>("familyID");
+                    b.Property<long?>("familyID");
 
                     b.Property<string>("passwordHash");
 
@@ -103,8 +103,7 @@ namespace ShopApi.Migrations
                 {
                     b.HasOne("ShopApi.Models.Private.User", "admin")
                         .WithMany()
-                        .HasForeignKey("adminID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("adminID");
                 });
 
             modelBuilder.Entity("ShopApi.Models.Private.List", b =>
@@ -130,8 +129,7 @@ namespace ShopApi.Migrations
                 {
                     b.HasOne("ShopApi.Models.Private.Family", "family")
                         .WithMany()
-                        .HasForeignKey("familyID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("familyID");
                 });
 #pragma warning restore 612, 618
         }
