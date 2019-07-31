@@ -1,22 +1,36 @@
+import 'package:family_list/models/AuthData.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:family_list/util/urls.dart';
-import 'package:family_list/widgets/password_field.dart';
+import 'package:family_list/widgets/form_fields.dart';
 
-class LoginScreen extends StatelessWidget {
-  LoginScreen();
+class LoginScreen extends StatefulWidget {
+  LoginScreen({Key key}) : super(key: key);
 
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  @override
+  State<StatefulWidget> createState() => _LoginScreenState();
+}
 
+class _LoginScreenState extends State<LoginScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final AuthData _data = new AuthData();
+  final FocusNode _emailFocus = FocusNode();
+  final FocusNode _passwordFocus = FocusNode();
+
+  // Retrieve json formatted body containing user data
   Map<String, String> _getBody() {
-    return {"email": emailController.text, "password": passwordController.text};
+    return {"email": _data.email, "password": _data.password};
   }
 
+  // Contact server to log in
   void _logIn() async {
-    print("logging in");
+    // Save all of the current form values (calls individual "onSave" attributes)
+    _formKey.currentState.save();
+
+    print(_data.email + "  " + _data.password);
+
     final response = await http.post(signInURL,
         headers: {"Content-Type": "application/x-www-form-urlencoded"},
         body: _getBody());
@@ -26,6 +40,7 @@ class LoginScreen extends StatelessWidget {
       print(response.body);
       final storage = new FlutterSecureStorage();
       await storage.write(key: "token", value: response.body);
+      Navigator.pop(context);
     }
   }
 
@@ -33,52 +48,42 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Sign In")),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(bottom: 32),
-              child: Text("Member Sign In",
-                  style: TextStyle(fontFamily: "ProductSans", fontSize: 30)),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(28),
-              child: Column(
-                children: <Widget>[
-                  // Email Form
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 24),
-                    child: Column(
-                      children: <Widget>[
-                        Text("Email",
-                            style: TextStyle(
-                                fontFamily: "ProductSans", fontSize: 18)),
-                        TextField(
-                          controller: emailController,
-                          textCapitalization: TextCapitalization.none,
-                          decoration: InputDecoration(
-                              hintText: 'johnsmith@gmail.com',
-                              icon: Icon(Icons.people)),
-                        ),
-                      ],
-                    ),
-                  ),
-                  // Password Form
-                  Text("Password",
-                      style:
-                          TextStyle(fontFamily: "ProductSans", fontSize: 18)),
-                  PasswordField(passwordController),
-                ],
+      body: Form(
+        key: _formKey,
+        child: SingleChildScrollView(
+          padding: EdgeInsets.all(28),
+          child: Column(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(bottom: 32),
+                child: Text("Member Sign In",
+                    style: TextStyle(fontFamily: "ProductSans", fontSize: 30)),
               ),
-            ),
-            RaisedButton(
-              child: Text("LOG IN"),
-              onPressed: _logIn,
-              color: Colors.blue,
-              textColor: Colors.white,
-            )
-          ],
+              Padding(
+                padding: EdgeInsets.only(bottom: 24),
+                child: Column(
+                  children: <Widget>[
+                    Text("Email Address",
+                        style:
+                            TextStyle(fontFamily: "ProductSans", fontSize: 18)),
+                    EmailField(_emailFocus, _passwordFocus, _data)
+                  ],
+                ),
+              ),
+              Text("Password",
+                  style: TextStyle(fontFamily: "ProductSans", fontSize: 18)),
+              PasswordField(_data, _passwordFocus),
+              Padding(
+                padding: const EdgeInsets.only(top: 12),
+                child: RaisedButton(
+                  child: Text("LOG IN"),
+                  onPressed: _logIn,
+                  color: Colors.blue,
+                  textColor: Colors.white,
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

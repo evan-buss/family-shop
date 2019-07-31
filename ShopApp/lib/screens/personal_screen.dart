@@ -54,7 +54,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
   // Details bottom card that shows on long press of an item
   Widget _itemCard(BuildContext context) {
     return Card(
-      elevation: 8,
+      elevation: 4,
       child: Padding(
           padding: const EdgeInsets.all(32.0),
           child: Column(

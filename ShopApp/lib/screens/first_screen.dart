@@ -1,4 +1,3 @@
-import 'package:family_list/screens/auth_screen.dart';
 import 'package:family_list/screens/login_screen.dart';
 import 'package:family_list/screens/signup_screen.dart';
 import 'package:family_list/widgets/picture_card.dart';
@@ -17,7 +16,7 @@ class FirstScreen extends StatelessWidget {
     }
 
     return Card(
-      elevation: 4,
+      elevation: 2,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
@@ -61,7 +60,7 @@ class FirstScreen extends StatelessWidget {
             Expanded(
               child: _stepCard("Create Account", Icons.create, () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => SignupScreen()));
+                    MaterialPageRoute(builder: (context) => SignUpScreen()));
               }, halfsize: true),
             ),
             Expanded(

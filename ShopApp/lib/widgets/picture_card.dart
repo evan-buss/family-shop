@@ -13,7 +13,7 @@ class PictureCard extends StatelessWidget {
     return Card(
       margin: const EdgeInsets.only(top: 16, right: 16, left: 16, bottom: 16),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      elevation: 4,
+      elevation: 2,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: (Column(
