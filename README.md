@@ -2,6 +2,10 @@
 
 A collaborative weekly shopping list for families.
 
+## Early Screenshots
+
+![home](https://github.com/evan-buss/family-shop/images/home.png)
+
 ## Mobile Application
 
 The mobile application is written in Dart using the Flutter framework from Google.
