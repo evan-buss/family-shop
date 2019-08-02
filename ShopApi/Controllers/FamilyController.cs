@@ -27,22 +27,21 @@ namespace ShopApi.Controllers
 
         }
 
-        // Return all members of the user's family
-        [HttpGet("members")]
-        public IEnumerable<User> GetMembers()
-        {
-            var email = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var memberList = _service.GetMembers(email);
-            return memberList;
-        }
+        // // Return all members of the user's family
+        // [HttpGet("members")]
+        // public IEnumerable<User> GetMembers()
+        // {
+        //     var email = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        //     var memberList = _service.GetMembers(email);
+        //     return memberList;
+        // }
 
         [HttpGet]
         public ActionResult<Family> GetFamily()
         {
-            Console.WriteLine("EMAIL: " + User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            var family = _service.GetFamily(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            var family = _service.GetFamily(getID());
             if (family != null)
-            {  
+            {
                 Console.WriteLine("RETURNING FAMILY");
                 return family;
             }
@@ -54,7 +53,8 @@ namespace ShopApi.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateFamily([FromBody] string name)
         {
-            var success = await _service.CreateFamily(getEmail(), name);
+            Console.WriteLine("New Family Name: " + name);
+            var success = await _service.CreateFamily(getID(), name);
             if (success)
             {
                 return Ok();
@@ -81,7 +81,7 @@ namespace ShopApi.Controllers
             return Ok(userID);
         }
 
-        private string getEmail()
+        private string getID()
         {
             return User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         }

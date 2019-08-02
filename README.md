@@ -2,11 +2,13 @@
 
 A collaborative weekly shopping list for families.
 
+- Flutter
+- Dotnet Core
+- Docker / Docker Compose
+
 ## Early Screenshots
 
 <img src="https://github.com/evan-buss/family-shop/blob/master/images/home.png" height="600">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://github.com/evan-buss/family-shop/blob/master/images/list.png" height="600">
-
-
 
 ## Mobile Application
 

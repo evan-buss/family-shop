@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:family_list/util/urls.dart';
 import 'package:family_list/widgets/picture_card.dart';
 
+// PersonalScreen displays the currently signed-in users personal items.
 class PersonalScreen extends StatefulWidget {
   PersonalScreen({Key key}) : super(key: key);
 
@@ -21,7 +22,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
 
   _PersonalScreenState();
 
-  // This seems to get called each time the user swipes to the screen
+  // When the view is created, retrieve the items
   @override
   void initState() {
     super.initState();
@@ -86,9 +87,11 @@ class _PersonalScreenState extends State<PersonalScreen> {
         itemCount: snapshot.data.length,
         itemBuilder: (context, index) {
           return ListTile(
-            onLongPress: () async {
+            onLongPress: () {},
+            onTap: () async {
               var sheetController = showBottomSheet(
                   context: context,
+                  elevation: 200.0,
                   builder: (BuildContext context) {
                     return _itemCard(context);
                   });
@@ -98,12 +101,14 @@ class _PersonalScreenState extends State<PersonalScreen> {
               });
             },
             title: Text(snapshot.data[index].title),
+            subtitle: Text(snapshot.data[index].description),
           );
         });
   }
 
   @override
   Widget build(BuildContext context) {
+    // Pull down to refresh the list
     return RefreshIndicator(
       onRefresh: () {
         items = retrievePersonalItems();

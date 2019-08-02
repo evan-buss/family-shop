@@ -118,3 +118,91 @@ BEGIN
     VALUES ('20190731191914_init', '2.2.6-servicing-10079');
     END IF;
 END $$;
+
+DO $$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190802023434_update1') THEN
+    ALTER TABLE "Families" DROP CONSTRAINT "FK_Families_Users_adminID";
+    END IF;
+END $$;
+
+DO $$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190802023434_update1') THEN
+    ALTER TABLE "Users" DROP CONSTRAINT "FK_Users_Families_familyID";
+    END IF;
+END $$;
+
+DO $$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190802023434_update1') THEN
+    DROP INDEX "IX_Users_familyID";
+    END IF;
+END $$;
+
+DO $$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190802023434_update1') THEN
+    DROP INDEX "IX_Families_adminID";
+    END IF;
+END $$;
+
+DO $$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190802023434_update1') THEN
+    ALTER TABLE "Families" DROP COLUMN "adminID";
+    END IF;
+END $$;
+
+DO $$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190802023434_update1') THEN
+    ALTER TABLE "Users" ALTER COLUMN "familyID" TYPE bigint;
+    ALTER TABLE "Users" ALTER COLUMN "familyID" SET NOT NULL;
+    ALTER TABLE "Users" ALTER COLUMN "familyID" DROP DEFAULT;
+    END IF;
+END $$;
+
+DO $$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190802023434_update1') THEN
+    ALTER TABLE "Users" ADD "updateTest" boolean NOT NULL DEFAULT FALSE;
+    END IF;
+END $$;
+
+DO $$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190802023434_update1') THEN
+    CREATE UNIQUE INDEX "IX_Users_familyID" ON "Users" ("familyID");
+    END IF;
+END $$;
+
+DO $$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190802023434_update1') THEN
+    ALTER TABLE "Users" ADD CONSTRAINT "FK_Users_Families_familyID" FOREIGN KEY ("familyID") REFERENCES "Families" ("familyID") ON DELETE CASCADE;
+    END IF;
+END $$;
+
+DO $$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190802023434_update1') THEN
+    INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+    VALUES ('20190802023434_update1', '2.2.6-servicing-10079');
+    END IF;
+END $$;
+
+DO $$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190802023534_update2') THEN
+    ALTER TABLE "Users" DROP COLUMN "updateTest";
+    END IF;
+END $$;
+
+DO $$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190802023534_update2') THEN
+    INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+    VALUES ('20190802023534_update2', '2.2.6-servicing-10079');
+    END IF;
+END $$;
