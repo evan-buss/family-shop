@@ -31,22 +31,19 @@ namespace ShopApi.Controllers
         // [HttpGet("members")]
         // public IEnumerable<User> GetMembers()
         // {
-        //     var email = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        //     var memberList = _service.GetMembers(email);
+        //     var memberList = _service.GetMembers(getID());
         //     return memberList;
         // }
 
+        // Return all details of the user's current family
         [HttpGet]
-        public ActionResult<Family> GetFamily()
+        public ActionResult<Models.Public.Response.Family> GetFamily()
         {
             var family = _service.GetFamily(getID());
             if (family != null)
             {
-                Console.WriteLine("RETURNING FAMILY");
                 return family;
             }
-
-            Console.WriteLine("FAMILY IS NULL");
             return BadRequest();
         }
 
@@ -63,23 +60,23 @@ namespace ShopApi.Controllers
             return BadRequest();
         }
 
-        [HttpPut("join/{id}")]
-        public IActionResult JoinFamily(long id)
-        {
-            return Ok(id);
-        }
+        // [HttpPut("join/{id}")]
+        // public IActionResult JoinFamily(long id)
+        // {
+        //     return Ok(id);
+        // }
 
-        [HttpPut("leave/{id}")]
-        public IActionResult LeaveFamily(long id)
-        {
-            return Ok(id);
-        }
+        // [HttpPut("leave/{id}")]
+        // public IActionResult LeaveFamily(long id)
+        // {
+        //     return Ok(id);
+        // }
 
-        [HttpPut("transfer")]
-        public IActionResult TransferAdmin([FromBody] long userID)
-        {
-            return Ok(userID);
-        }
+        // [HttpPut("transfer")]
+        // public IActionResult TransferAdmin([FromBody] long userID)
+        // {
+        //     return Ok(userID);
+        // }
 
         private string getID()
         {

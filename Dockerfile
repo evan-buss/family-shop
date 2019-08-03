@@ -15,3 +15,5 @@ WORKDIR /app
 COPY --from=build-env /app/out .
 ENTRYPOINT ["dotnet", "ShopApi.dll"]
 # RUN dotnet ef migrations script -o scripts/init.sql --idempotent
+# dotnet ef migrations script -i --output scripts/init.sql
+

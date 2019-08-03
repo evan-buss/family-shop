@@ -75,7 +75,6 @@ namespace ShopApi.Controllers
                 email = email,
                 passwordSalt = salt,
                 passwordHash = hashedPassword,
-                familyID = 1
             };
             _context.Add(newUser);
             await _context.SaveChangesAsync();

@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace ShopApi.Migrations
 {
-    public partial class init : Migration
+    public partial class second : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -47,14 +47,14 @@ namespace ShopApi.Migrations
                     familyID = table.Column<long>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     name = table.Column<string>(nullable: true),
-                    adminID = table.Column<long>(nullable: true)
+                    adminuserID = table.Column<long>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Families", x => x.familyID);
                     table.ForeignKey(
-                        name: "FK_Families_Users_adminID",
-                        column: x => x.adminID,
+                        name: "FK_Families_Users_adminuserID",
+                        column: x => x.adminuserID,
                         principalTable: "Users",
                         principalColumn: "userID",
                         onDelete: ReferentialAction.Restrict);
@@ -89,9 +89,9 @@ namespace ShopApi.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Families_adminID",
+                name: "IX_Families_adminuserID",
                 table: "Families",
-                column: "adminID");
+                column: "adminuserID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ListItems_listID",
@@ -133,7 +133,7 @@ namespace ShopApi.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Families_Users_adminID",
+                name: "FK_Families_Users_adminuserID",
                 table: "Families");
 
             migrationBuilder.DropTable(

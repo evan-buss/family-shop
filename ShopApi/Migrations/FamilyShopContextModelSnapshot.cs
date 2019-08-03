@@ -24,9 +24,13 @@ namespace ShopApi.Migrations
                     b.Property<long>("familyID")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<long?>("adminuserID");
+
                     b.Property<string>("name");
 
                     b.HasKey("familyID");
+
+                    b.HasIndex("adminuserID");
 
                     b.ToTable("Families");
                 });
@@ -78,7 +82,7 @@ namespace ShopApi.Migrations
 
                     b.Property<string>("email");
 
-                    b.Property<long>("familyID");
+                    b.Property<long?>("familyID");
 
                     b.Property<string>("passwordHash");
 
@@ -88,10 +92,16 @@ namespace ShopApi.Migrations
 
                     b.HasKey("userID");
 
-                    b.HasIndex("familyID")
-                        .IsUnique();
+                    b.HasIndex("familyID");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("ShopApi.Models.Private.Family", b =>
+                {
+                    b.HasOne("ShopApi.Models.Private.User", "admin")
+                        .WithMany()
+                        .HasForeignKey("adminuserID");
                 });
 
             modelBuilder.Entity("ShopApi.Models.Private.List", b =>
@@ -116,9 +126,8 @@ namespace ShopApi.Migrations
             modelBuilder.Entity("ShopApi.Models.Private.User", b =>
                 {
                     b.HasOne("ShopApi.Models.Private.Family")
-                        .WithOne("admin")
-                        .HasForeignKey("ShopApi.Models.Private.User", "familyID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .WithMany("members")
+                        .HasForeignKey("familyID");
                 });
 #pragma warning restore 612, 618
         }
