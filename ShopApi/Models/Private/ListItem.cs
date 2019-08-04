@@ -10,11 +10,11 @@ namespace ShopApi.Models.Private
         public long itemID { get; set; }
         public string title { get; set; }
         public string description { get; set; }
-        public List list { get; set; }
+        public virtual List list { get; set; }
 
         public long userID { get; set;}
 
         [ForeignKey("userID")]
-        public User user { get; set; }
+        public virtual User user { get; set; }
     }
 }

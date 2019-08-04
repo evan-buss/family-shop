@@ -27,9 +27,10 @@ namespace ShopApi
         {
 
             services.AddDbContext<FamilyShopContext>(opt =>
-                opt.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"))
+                opt.UseLazyLoadingProxies().
+                    UseNpgsql(Configuration.GetConnectionString("DefaultConnection"))
             );
-            
+
             // Load Appsettings from appsettings.json "AppSettings" block
             var appSettingsSection = Configuration.GetSection("AppSettings");
             // services.Configure<AppSettings>(appSettingsSection);

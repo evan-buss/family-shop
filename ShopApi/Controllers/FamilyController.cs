@@ -10,7 +10,9 @@ using ShopApi.Models;
 using ShopApi.Models.Private;
 using ShopApi.Services;
 
-
+// Future:
+//  - Change family owner
+//  - Delete family entirely
 namespace ShopApi.Controllers
 {
     [Authorize]
@@ -24,16 +26,7 @@ namespace ShopApi.Controllers
         {
             _context = context;
             _service = new FamilyService(_context);
-
         }
-
-        // // Return all members of the user's family
-        // [HttpGet("members")]
-        // public IEnumerable<User> GetMembers()
-        // {
-        //     var memberList = _service.GetMembers(getID());
-        //     return memberList;
-        // }
 
         // Return all details of the user's current family
         [HttpGet]
@@ -44,7 +37,7 @@ namespace ShopApi.Controllers
             {
                 return family;
             }
-            return BadRequest();
+            return NotFound();
         }
 
         [HttpPost]
@@ -60,23 +53,28 @@ namespace ShopApi.Controllers
             return BadRequest();
         }
 
-        // [HttpPut("join/{id}")]
-        // public IActionResult JoinFamily(long id)
-        // {
-        //     return Ok(id);
-        // }
+        // Join an existing family
+        [HttpPut("{familyID}")]
+        public async Task<ActionResult<Models.Public.Response.Family>> JoinFamily(long familyID)
+        {
+            var family = await _service.JoinFamily(familyID, getID());
+            if (family != null)
+            {
+                return family;
+            }
+            return NotFound();
+        }
 
-        // [HttpPut("leave/{id}")]
-        // public IActionResult LeaveFamily(long id)
-        // {
-        //     return Ok(id);
-        // }
-
-        // [HttpPut("transfer")]
-        // public IActionResult TransferAdmin([FromBody] long userID)
-        // {
-        //     return Ok(userID);
-        // }
+        [HttpDelete]
+        public async Task<ActionResult> LeaveFamily()
+        {
+            var success = await _service.LeaveFamily(getID());
+            if (success)
+            {
+                return Ok();
+            }
+            return BadRequest();
+        }
 
         private string getID()
         {
