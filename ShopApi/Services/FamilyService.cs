@@ -25,11 +25,11 @@ namespace ShopApi.Services
             if (user != null)
             {
                 // Create a new family with the given details
-                var family = new Models.Private.Family
+                var family = new Models.Database.Family
                 {
                     admin = user,
                     name = familyName,
-                    members = new List<Models.Private.User>()
+                    members = new List<Models.Database.User>()
                 };
 
                 family.members.Add(user);

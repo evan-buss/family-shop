@@ -7,7 +7,7 @@ using System;
 
 
 using ShopApi.Models;
-using ShopApi.Models.Private;
+using ShopApi.Models.Database;
 using ShopApi.Services;
 
 // Future:

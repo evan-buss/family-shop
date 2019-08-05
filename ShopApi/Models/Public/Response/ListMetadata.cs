@@ -1,9 +1,8 @@
 namespace ShopApi.Models.Public.Response
 {
-    // Response to creating a new list item. Contains the itemID
-    public class Item
+    public class ListMetadata
     {
-        public long itemID { get; set; }
+        public long listID { get; set; }
         public string title { get; set; }
         public string description { get; set; }
     }

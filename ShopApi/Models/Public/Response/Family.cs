@@ -8,5 +8,6 @@ namespace ShopApi.Models.Public.Response
         public string name { get; set; }
         public Models.Public.Response.User admin { get; set; }
         public ICollection<Models.Public.Response.User> members { get; set; }
+        public ICollection<Models.Public.Response.List> lists { get; set; }
     }
 }

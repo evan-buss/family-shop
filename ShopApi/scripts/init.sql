@@ -7,7 +7,7 @@
 
 DO $$
 BEGIN
-    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190803193957_second') THEN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190805172250_first') THEN
     CREATE TABLE "Lists" (
         "listID" bigserial NOT NULL,
         name text NULL,
@@ -20,7 +20,7 @@ END $$;
 
 DO $$
 BEGIN
-    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190803193957_second') THEN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190805172250_first') THEN
     CREATE TABLE "Users" (
         "userID" bigserial NOT NULL,
         username text NULL,
@@ -35,7 +35,7 @@ END $$;
 
 DO $$
 BEGIN
-    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190803193957_second') THEN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190805172250_first') THEN
     CREATE TABLE "Families" (
         "familyID" bigserial NOT NULL,
         name text NULL,
@@ -48,7 +48,7 @@ END $$;
 
 DO $$
 BEGIN
-    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190803193957_second') THEN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190805172250_first') THEN
     CREATE TABLE "ListItems" (
         "itemID" bigserial NOT NULL,
         title text NULL,
@@ -64,57 +64,72 @@ END $$;
 
 DO $$
 BEGIN
-    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190803193957_second') THEN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190805172250_first') THEN
     CREATE INDEX "IX_Families_adminuserID" ON "Families" ("adminuserID");
     END IF;
 END $$;
 
 DO $$
 BEGIN
-    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190803193957_second') THEN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190805172250_first') THEN
     CREATE INDEX "IX_ListItems_listID" ON "ListItems" ("listID");
     END IF;
 END $$;
 
 DO $$
 BEGIN
-    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190803193957_second') THEN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190805172250_first') THEN
     CREATE INDEX "IX_ListItems_userID" ON "ListItems" ("userID");
     END IF;
 END $$;
 
 DO $$
 BEGIN
-    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190803193957_second') THEN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190805172250_first') THEN
     CREATE INDEX "IX_Lists_familyID" ON "Lists" ("familyID");
     END IF;
 END $$;
 
 DO $$
 BEGIN
-    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190803193957_second') THEN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190805172250_first') THEN
     CREATE INDEX "IX_Users_familyID" ON "Users" ("familyID");
     END IF;
 END $$;
 
 DO $$
 BEGIN
-    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190803193957_second') THEN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190805172250_first') THEN
     ALTER TABLE "Lists" ADD CONSTRAINT "FK_Lists_Families_familyID" FOREIGN KEY ("familyID") REFERENCES "Families" ("familyID") ON DELETE RESTRICT;
     END IF;
 END $$;
 
 DO $$
 BEGIN
-    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190803193957_second') THEN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190805172250_first') THEN
     ALTER TABLE "Users" ADD CONSTRAINT "FK_Users_Families_familyID" FOREIGN KEY ("familyID") REFERENCES "Families" ("familyID") ON DELETE RESTRICT;
     END IF;
 END $$;
 
 DO $$
 BEGIN
-    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190803193957_second') THEN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190805172250_first') THEN
     INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
-    VALUES ('20190803193957_second', '2.2.6-servicing-10079');
+    VALUES ('20190805172250_first', '2.2.6-servicing-10079');
+    END IF;
+END $$;
+
+DO $$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190805184729_new1') THEN
+    ALTER TABLE "Lists" RENAME COLUMN name TO title;
+    END IF;
+END $$;
+
+DO $$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20190805184729_new1') THEN
+    INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+    VALUES ('20190805184729_new1', '2.2.6-servicing-10079');
     END IF;
 END $$;

@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ShopApi.Models.Private
+namespace ShopApi.Models.Database
 {
     public class Family
     {
@@ -13,23 +13,21 @@ namespace ShopApi.Models.Private
         public virtual ICollection<User> members { get; set; }
         public virtual ICollection<List> lists { get; set; }
 
+        // Convert the database family model to a public family model with private data removed.
         public Models.Public.Response.Family toPublic()
         {
             var publicFam = new Models.Public.Response.Family
             {
                 familyID = this.familyID,
                 name = this.name,
-                admin = new Models.Public.Response.User
-                {
-                    userID = this.admin.userID,
-                    username = this.admin.username
-                },
+                admin = admin.ToPublic(),
                 members = new List<Models.Public.Response.User>(this.members.Select(x =>
-                    new Models.Public.Response.User
-                    {
-                        userID = x.userID,
-                        username = x.username
-                    }))
+                    x.ToPublic()
+                )),
+                // Return the public model for each list in the family
+                lists = new List<Models.Public.Response.List>(this.lists.Select(x =>
+                    x.ToPublic()
+                ))
             };
 
             return publicFam;

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using ShopApi.Models.Private;
+using ShopApi.Models.Database;
 using ShopApi.Models;
 using ShopApi.Services;
 using System;
