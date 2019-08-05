@@ -11,10 +11,6 @@ namespace ShopApi.Models.Database
         public string title { get; set; }
         public string description { get; set; }
         public virtual List list { get; set; }
-
-        public long userID { get; set; }
-
-        [ForeignKey("userID")]
         public virtual User user { get; set; }
 
         public Models.Public.Response.Item ToPublic()

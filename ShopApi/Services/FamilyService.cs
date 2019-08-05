@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -55,6 +54,18 @@ namespace ShopApi.Services
             }
             return null;
 
+        }
+
+        public List<Models.Public.Response.User> GetUsers(string userID)
+        {
+            var user = _context.Users.Find(long.Parse(userID));
+            var family = _context.Families.Where(q => q.members.Contains(user)).FirstOrDefault();
+
+            if (family != null)
+            {
+                return new List<Models.Public.Response.User>(family.members.Select(x => x.ToPublic()));
+            }
+            return null;
         }
 
         public async Task<Models.Public.Response.Family> JoinFamily(long familyID, string userID)

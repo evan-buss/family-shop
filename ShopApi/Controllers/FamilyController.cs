@@ -28,6 +28,9 @@ namespace ShopApi.Controllers
             _service = new FamilyService(_context);
         }
 
+        // TODO: Allow family deletion
+        // 
+
         // Return all details of the user's current family
         [HttpGet]
         public ActionResult<Models.Public.Response.Family> GetFamily()
@@ -40,10 +43,20 @@ namespace ShopApi.Controllers
             return NotFound();
         }
 
+        [HttpGet("users")]
+        public ActionResult<List<Models.Public.Response.User>> GetUsers()
+        {
+            var users = _service.GetUsers(getID());
+            if (users != null)
+            {
+                return users;
+            }
+            return NotFound();
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateFamily([FromBody] string name)
         {
-            Console.WriteLine("New Family Name: " + name);
             var success = await _service.CreateFamily(getID(), name);
             if (success)
             {

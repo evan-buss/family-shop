@@ -26,7 +26,6 @@ namespace ShopApi.Controllers
         [HttpPost]
         public IActionResult SignIn(string email, string password)
         {
-            Console.WriteLine("email: " + email + "  pass: " + password);
             // Search for the given email in the Users table
             var user = _context.Users.Where(q => q.email == email).FirstOrDefault();
             if (user == null)
@@ -52,7 +51,6 @@ namespace ShopApi.Controllers
         public async Task<IActionResult> SignUp(string username, string password, string email)
         {
 
-            Console.WriteLine("user: " + username + "  pass: " + password + " email: " + email);
             // 1. Ensure email isn't used
             if (!_authService.emailAvailable(email))
             {

@@ -1,20 +1,16 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 
 using ShopApi.Services;
 
 using ShopApi.Models;
-using ShopApi.Models.Database;
 
 // ListController handles high level list managment. Creating, Deletion, Updating the list as a WHOLE
 namespace ShopApi.Controllers
 {
-
     [Authorize]
     [Route("api/[controller]")]
     public class ListController : ControllerBase
