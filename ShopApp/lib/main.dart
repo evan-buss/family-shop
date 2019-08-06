@@ -1,8 +1,7 @@
 import 'package:family_list/redux/state.dart';
-import 'package:family_list/util/net.dart';
+import 'package:family_list/util/local_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:redux/redux.dart';
 import 'package:family_list/redux/reducers.dart';
 import 'package:http/http.dart' as http;
@@ -14,6 +13,8 @@ import 'package:family_list/screens/personal_screen.dart';
 
 import 'package:family_list/util/urls.dart';
 import 'package:family_list/models/ListItem.dart';
+import 'package:family_list/models/Lists.dart';
+import 'package:family_list/widgets/app_drawer.dart';
 
 void main() {
   final store = new Store<AppState>(authReducer, initialState: new AppState());
@@ -94,11 +95,39 @@ class _PageContainerState extends State<PageContainer> {
     print('Response status ${response.statusCode}');
   }
 
+  // Load the user's lists
+  Widget _listDropDownBuilder() {
+    return FutureBuilder(
+      future: Lists.getLists(),
+      builder:
+          (BuildContext context, AsyncSnapshot<List<ShoppingList>> snapshot) {
+        if (snapshot.hasError) {
+          return null;
+        }
+        return PopupMenuButton<ShoppingList>(
+            icon: Icon(Icons.list),
+            onSelected: (selection) {
+              print("selection: " + selection.title);
+            },
+            itemBuilder: (BuildContext context) {
+              return snapshot.data
+                  .map<PopupMenuItem<ShoppingList>>((ShoppingList list) {
+                return PopupMenuItem(
+                  value: list,
+                  child: Text(list.title),
+                );
+              }).toList();
+            });
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(titles[_activePage]),
+        actions: <Widget>[_listDropDownBuilder()],
       ),
       body: new PageView(
         onPageChanged: (int page) {
@@ -144,68 +173,6 @@ class _PageContainerState extends State<PageContainer> {
           onPressed: _createItem,
         ),
       ),
-    );
-  }
-}
-
-// App Drawer that provides quick account information
-class AppDrawer extends StatelessWidget {
-  AppDrawer();
-
-// Icon
-// Name
-// Family
-// ------------
-// *family names*
-// ------------
-// Log out
-// Settings
-
-  Future<String> getName() async {
-    final storage = FlutterSecureStorage();
-    var name = await storage.read(key: "username");
-    name = name.split(" ")[0];
-    return "Greetings, " + name;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-      padding: EdgeInsets.zero,
-      children: <Widget>[
-        DrawerHeader(
-          child: FutureBuilder<String>(
-              future: getName(),
-              builder: (context, snapshot) {
-                if (snapshot.data != null) {
-                  return Text(
-                    snapshot.data,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: "ProductSans",
-                        fontSize: 30),
-                  );
-                }
-                return Text(
-                  "Please Sign In",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontFamily: "ProductSans",
-                      fontSize: 30),
-                );
-              }),
-          decoration: BoxDecoration(color: Colors.blue),
-        ),
-        ListTile(
-          title: Text("Family"),
-        ),
-        ListTile(
-          title: Text("Log Out"),
-        ),
-        ListTile(
-          title: Text("Settings"),
-        ),
-      ],
     );
   }
 }

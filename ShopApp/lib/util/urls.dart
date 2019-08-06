@@ -7,3 +7,4 @@ final String signInURL = "http://$address:$port/signin";
 
 // List URLS
 final String personalListURL = "http://$address:$port/api/personal";
+final String getListsURL = "http://$address:$port/api/list";
