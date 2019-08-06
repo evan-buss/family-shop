@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using System;
 
 using ShopApi.Models;
 
@@ -23,22 +24,28 @@ namespace ShopApi.Controllers
         //      - Email
         //      - Username
 
-        [HttpGet("{userID}")]
-        public ActionResult<List<Models.Public.Response.User>> GetSpecificUser(long userID)
-        {
-            return Ok();
-        }
-
-        [HttpGet("/whoami")]
+        [HttpGet]
         public ActionResult<Models.Public.Response.User> WhoAmI()
         {
             var user = _context.Users.Find(getID());
-            return new ObjectResult(user.ToPublic());
+            if (user != null)
+            {
+                Console.WriteLine(user.username);
+                return user.ToPublic();
+            }
+            return NotFound();
         }
 
-        private string getID()
+        // TODO: Implement user searching
+        [HttpGet("{userID}")]
+        public ActionResult<List<Models.Public.Response.User>> GetSpecificUser(long userID)
         {
-            return User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            return BadRequest();
+        }
+
+        private long getID()
+        {
+            return long.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
         }
     }
 }
