@@ -25,9 +25,24 @@ class AppUser with ChangeNotifier {
     print("App user constructor called !!!");
   }
 
+  // TODO: In the future the server should be pinged to renew token if necessary...
+  void loadIfCached() async {
+    this.token = await storage.read(key: "token");
+    if (token != null) {
+      notifyListeners();
+    }
+  }
+
+  // Log the user out of the app. Remove all their data from secure storage.
   void logOut() async {
+    await storage.delete(key: "username");
+    await storage.delete(key: "email");
+    await storage.delete(key: "password");
     await storage.delete(key: "token");
     this.token = null;
+    this.username = null;
+    this.password = null;
+    this.email = null;
     notifyListeners();
   }
 
@@ -67,13 +82,6 @@ class AppUser with ChangeNotifier {
       notifyListeners();
       callback();
     }
-  }
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    print("app user disposed...");
   }
 }
 

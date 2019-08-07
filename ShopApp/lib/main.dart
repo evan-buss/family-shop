@@ -130,6 +130,9 @@ class _PageContainerState extends State<PageContainer> {
 
   @override
   Widget build(BuildContext context) {
+    // Attempt to load existing user from the local storage. Otherwise they need to manually log in again...
+    Provider.of<AppUser>(context).loadIfCached();
+
     return Scaffold(
       appBar: AppBar(
         title: Text(titles[_activePage]),

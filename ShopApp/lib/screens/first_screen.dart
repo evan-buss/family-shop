@@ -82,24 +82,3 @@ class FirstScreen extends StatelessWidget {
     );
   }
 }
-
-/*
-StoreConnector<AppState, String>(
-          converter: (store) => store.state.name,
-          builder: (context, state) {
-            return Text(state);
-          },
-        ),
-        StoreConnector<AppState, AppState>(
-          converter: (store) => store.state,
-          builder: (context, callback) {
-            return new FloatingActionButton(
-              onPressed: () {
-                final store = StoreProvider.of<AppState>(context);
-                store.dispatch(UpdateNameAction("New Name"));
-              },
-              child: Icon(Icons.edit),
-            );
-          },
-        )
-*/
