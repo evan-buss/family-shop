@@ -1,12 +1,12 @@
 import 'package:email_validator/email_validator.dart';
-import 'package:family_list/models/AuthData.dart';
+import 'package:family_list/models/AppUser.dart';
 import 'package:flutter/material.dart';
 
 import 'package:family_list/widgets/utils.dart';
 
 class PasswordField extends StatefulWidget {
   final FocusNode _passwordFocus;
-  final AuthData _data;
+  final LoginData _data;
   PasswordField(
     this._data,
     this._passwordFocus, {
@@ -54,7 +54,7 @@ class _PasswordFieldState extends State<PasswordField> {
 class EmailField extends StatelessWidget {
   final FocusNode _emailFocus;
   final FocusNode _nextFocus;
-  final AuthData _data;
+  final LoginData _data;
 
   EmailField(this._emailFocus, this._nextFocus, this._data);
 

@@ -1,36 +1,32 @@
-import 'package:family_list/redux/state.dart';
-import 'package:family_list/util/local_storage.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:redux/redux.dart';
-import 'package:family_list/redux/reducers.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:family_list/screens/signup_screen.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 import 'package:family_list/screens/family_screen.dart';
 import 'package:family_list/screens/home_screen.dart';
 import 'package:family_list/screens/personal_screen.dart';
 
 import 'package:family_list/util/urls.dart';
+import 'package:family_list/util/local_storage.dart';
+import 'package:family_list/models/AppUser.dart';
 import 'package:family_list/models/ListItem.dart';
-import 'package:family_list/models/Lists.dart';
+import 'package:family_list/models/ListMeta.dart';
 import 'package:family_list/widgets/app_drawer.dart';
 
 void main() {
-  final store = new Store<AppState>(authReducer, initialState: new AppState());
-  runApp(MyApp(store: store));
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final Store<AppState> store;
-
-  MyApp({this.store});
+  MyApp();
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return StoreProvider<AppState>(
-      store: store,
+    return ChangeNotifierProvider(
+      builder: (context) => AppUser(),
       child: MaterialApp(
         title: 'Shopping List',
         debugShowCheckedModeBanner: false,
@@ -97,27 +93,37 @@ class _PageContainerState extends State<PageContainer> {
 
   // Load the user's lists
   Widget _listDropDownBuilder() {
-    return FutureBuilder(
-      future: Lists.getLists(),
-      builder:
-          (BuildContext context, AsyncSnapshot<List<ShoppingList>> snapshot) {
-        if (snapshot.hasError) {
-          return null;
-        }
-        return PopupMenuButton<ShoppingList>(
-            icon: Icon(Icons.list),
-            onSelected: (selection) {
-              print("selection: " + selection.title);
-            },
-            itemBuilder: (BuildContext context) {
-              return snapshot.data
-                  .map<PopupMenuItem<ShoppingList>>((ShoppingList list) {
-                return PopupMenuItem(
-                  value: list,
-                  child: Text(list.title),
-                );
-              }).toList();
-            });
+    return Consumer<AppUser>(
+      builder: (context, user, _) {
+        return FutureBuilder(
+          future: UserLists.getLists(),
+          builder: (BuildContext context,
+              AsyncSnapshot<List<ListsMetadata>> snapshot) {
+            if (user.token != null) {
+              return PopupMenuButton<ListsMetadata>(
+                  icon: Icon(Icons.list),
+                  onSelected: (selection) {
+                    print("selection: " + selection.title);
+                  },
+                  itemBuilder: (BuildContext context) {
+                    return snapshot.data.map<PopupMenuItem<ListsMetadata>>(
+                        (ListsMetadata list) {
+                      return PopupMenuItem(
+                        value: list,
+                        child: Text(list.title),
+                      );
+                    }).toList();
+                  });
+            }
+            return IconButton(
+              icon: Icon(Icons.person),
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => SignUpScreen()));
+              },
+            );
+          },
+        );
       },
     );
   }
@@ -157,11 +163,11 @@ class _PageContainerState extends State<PageContainer> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
-            title: Text('My List'),
+            title: Text('My Items'),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.people),
-            title: Text('Family List'),
+            title: Text('Family Items'),
           ),
         ],
       ),

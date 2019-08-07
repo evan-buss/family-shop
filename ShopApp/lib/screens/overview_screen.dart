@@ -1,5 +1,6 @@
+import 'package:family_list/models/AppUser.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:provider/provider.dart';
 
 class OverviewScreen extends StatelessWidget {
   OverviewScreen();
@@ -17,9 +18,8 @@ class OverviewScreen extends StatelessWidget {
       ),
       RaisedButton(
         child: Text("Log Out"),
-        onPressed: () async {
-          final storage = FlutterSecureStorage();
-          await storage.delete(key: "token");
+        onPressed: () {
+          Provider.of<AppUser>(context, listen: true).logOut();
         },
       )
     ]);

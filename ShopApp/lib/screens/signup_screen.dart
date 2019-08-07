@@ -1,13 +1,11 @@
-import 'package:family_list/models/AuthData.dart';
+import 'package:family_list/models/AppUser.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:http/http.dart' as http;
 
-import 'package:family_list/util/urls.dart';
 import 'package:family_list/util/text_styles.dart' as text_styles;
 import 'package:family_list/widgets/form_fields.dart';
 import 'package:family_list/widgets/utils.dart';
+import 'package:provider/provider.dart';
 
 class SignUpScreen extends StatefulWidget {
   SignUpScreen({Key key}) : super(key: key);
@@ -23,35 +21,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _emailFocus = FocusNode();
   final _passwordFocus = FocusNode();
 
-  Map<String, String> _getBody() {
-    return {
-      "username": _data.name,
-      "email": _data.email,
-      "password": _data.password
-    };
-  }
-
   // Contact server to create new account
   void _signUp() async {
     if (_formKey.currentState.validate()) {
       // Save all of the current form values (calls individual "onSave" attributes)
       _formKey.currentState.save();
-
-      final response = await http.post(signUpURL,
-          headers: {"Content-Type": "application/x-www-form-urlencoded"},
-          body: _getBody());
-
-      // TODO: Handle various error responses and codes
-      // Save the user's info to secure storage on success
-      if (response.statusCode == 200) {
-        final storage = new FlutterSecureStorage();
-        await storage.write(key: "username", value: _data.name);
-        await storage.write(key: "email", value: _data.email);
-        await storage.write(key: "password", value: _data.password);
-        await storage.write(key: "token", value: response.body);
-
-        Navigator.pop(context);
-      }
+      Provider.of<AppUser>(context, listen: true)
+          .signup(_data, () => Navigator.pop(context));
     }
   }
 

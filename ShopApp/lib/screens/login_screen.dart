@@ -1,4 +1,4 @@
-import 'package:family_list/models/AuthData.dart';
+import 'package:family_list/models/AppUser.dart';
 import 'package:family_list/util/local_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:family_list/util/urls.dart';
 import 'package:family_list/widgets/form_fields.dart';
 import 'package:family_list/util/text_styles.dart' as text_styles;
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   LoginScreen({Key key}) : super(key: key);
@@ -16,31 +17,17 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-  final AuthData _data = new AuthData();
+  final LoginData _data = new LoginData();
   final FocusNode _emailFocus = FocusNode();
   final FocusNode _passwordFocus = FocusNode();
-
-  // Retrieve json formatted body containing user data
-  Map<String, String> _getBody() {
-    return {"email": _data.email, "password": _data.password};
-  }
 
   // Contact server to log in
   void _logIn() async {
     // Save all of the current form values (calls individual "onSave" attributes)
     _formKey.currentState.save();
 
-    print(_data.email + "  " + _data.password);
-
-    final response = await http.post(signInURL,
-        headers: {"Content-Type": "application/x-www-form-urlencoded"},
-        body: _getBody());
-
-    print(response.statusCode);
-    if (response.statusCode == 200) {
-      setAuthToken(response.body);
-      Navigator.pop(context);
-    }
+    Provider.of<AppUser>(context, listen: true)
+        .login(_data, () => Navigator.pop(context));
   }
 
   @override
