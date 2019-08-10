@@ -18,13 +18,31 @@ class _LoginScreenState extends State<LoginScreen> {
   final FocusNode _emailFocus = FocusNode();
   final FocusNode _passwordFocus = FocusNode();
 
+  String errorString = "";
+
   // Contact server to log in
   void _logIn() async {
     // Save all of the current form values (calls individual "onSave" attributes)
-    _formKey.currentState.save();
 
-    Provider.of<AppUser>(context, listen: true)
-        .login(_data, () => Navigator.pop(context));
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
+      Provider.of<AppUser>(context, listen: true).login(_data,
+          (int statusCode) {
+        if (statusCode == 200) {
+          Navigator.pop(context);
+        } else {
+          if (statusCode == 400) {
+            setState(() {
+              this.errorString = "Invalid login credentials";
+            });
+          } else if (statusCode == 503) {
+            setState(() {
+              this.errorString = "Unable to connect to server";
+            });
+          }
+        }
+      });
+    }
   }
 
   @override
@@ -60,6 +78,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   color: Colors.blue,
                   textColor: Colors.white,
                 ),
+              ),
+              Visibility(
+                child: Text(
+                  this.errorString,
+                  style:
+                      TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+                ),
+                visible: this.errorString.isNotEmpty,
               )
             ],
           ),

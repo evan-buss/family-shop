@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:family_list/screens/login_screen.dart';
 import 'package:family_list/screens/signup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -95,44 +96,36 @@ class _PageContainerState extends State<PageContainer> {
   Widget _listDropDownBuilder() {
     return Consumer<AppUser>(
       builder: (context, user, _) {
-        return FutureBuilder(
-          future: UserLists.getLists(),
-          builder: (BuildContext context,
-              AsyncSnapshot<List<ListsMetadata>> snapshot) {
-            if (user.token != null) {
-              return PopupMenuButton<ListsMetadata>(
-                  icon: Icon(Icons.list),
-                  onSelected: (selection) {
-                    print("selection: " + selection.title);
-                  },
-                  itemBuilder: (BuildContext context) {
-                    return snapshot.data.map<PopupMenuItem<ListsMetadata>>(
-                        (ListsMetadata list) {
-                      return PopupMenuItem(
-                        value: list,
-                        child: Text(list.title),
-                      );
-                    }).toList();
-                  });
-            }
-            return IconButton(
-              icon: Icon(Icons.person),
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => SignUpScreen()));
-              },
-            );
-          },
-        );
+        if (user.state == AppState.LOGGED_IN) {
+          return FutureBuilder(
+            future: UserLists.getLists(user.token),
+            builder: (context, AsyncSnapshot<List<ListsMetadata>> snapshot) {
+              print(user.token);
+              if (snapshot.data != null) {
+                return PopupMenuButton<ListsMetadata>(
+                    icon: Icon(Icons.list),
+                    tooltip: "Family's Lists",
+                    itemBuilder: (BuildContext context) {
+                      return snapshot.data.map<PopupMenuItem<ListsMetadata>>(
+                          (ListsMetadata list) {
+                        return PopupMenuItem(
+                          value: list,
+                          child: Text(list.title),
+                        );
+                      }).toList();
+                    });
+              }
+              return LoginButton();
+            },
+          );
+        }
+        return LoginButton();
       },
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    // Attempt to load existing user from the local storage. Otherwise they need to manually log in again...
-    Provider.of<AppUser>(context).loadIfCached();
-
     return Scaffold(
       appBar: AppBar(
         title: Text(titles[_activePage]),
@@ -180,6 +173,22 @@ class _PageContainerState extends State<PageContainer> {
           tooltip: 'New Item',
           child: Icon(Icons.add),
           onPressed: _createItem,
+        ),
+      ),
+    );
+  }
+}
+
+// FIXME: Determine where to place this widget.. Not sure if keeping here
+class LoginButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return FlatButton(
+      child: Text("LOG IN", style: TextStyle(color: Colors.white)),
+      onPressed: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => LoginScreen(),
         ),
       ),
     );

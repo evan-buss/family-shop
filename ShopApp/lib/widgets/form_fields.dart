@@ -25,14 +25,17 @@ class _PasswordFieldState extends State<PasswordField> {
     return TextFormField(
       textInputAction: TextInputAction.done,
       focusNode: widget._passwordFocus,
+      autovalidate: true,
       obscureText: !passwordVisible,
       validator: (value) {
         if (value.isEmpty) {
           return 'Please enter a password';
+        } else if (value.length < 6) {
+          return 'Passwords must be atleast 6 characters';
         }
         return null;
       },
-      onSaved: (value) => widget._data.password = value,
+      onSaved: (value) => widget._data.password = value.trim(),
       decoration: InputDecoration(
         hintText: "Account Password",
         icon: Icon(Icons.lock),
@@ -62,6 +65,7 @@ class EmailField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       autocorrect: false,
+      autovalidate: true,
       focusNode: _emailFocus,
       keyboardType: TextInputType.emailAddress,
       validator: (value) {
@@ -74,7 +78,7 @@ class EmailField extends StatelessWidget {
       },
       onFieldSubmitted: (term) =>
           fieldFocusChange(context, _emailFocus, _nextFocus),
-      onSaved: (value) => _data.email = value,
+      onSaved: (value) => _data.email = value.trim(),
       textCapitalization: TextCapitalization.none,
       textInputAction: TextInputAction.next,
       decoration: InputDecoration(

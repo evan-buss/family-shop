@@ -34,7 +34,13 @@ namespace ShopApi.Controllers
             }
             if (_authService.hashPassword(user.passwordSalt, password) == user.passwordHash)
             {
-                return new ObjectResult(_authService.GenerateToken(user.userID.ToString()));
+                return new ObjectResult(new Models.Public.Response.AuthedUser
+                {
+                    id = user.userID,
+                    username = user.username,
+                    token = _authService.GenerateToken(user.userID.ToString()),
+                });
+
             }
             return BadRequest("Invalid username or password.");
         }
@@ -50,7 +56,6 @@ namespace ShopApi.Controllers
         [HttpPost]
         public async Task<IActionResult> SignUp(string username, string password, string email)
         {
-
             // 1. Ensure email isn't used
             if (!_authService.emailAvailable(email))
             {
@@ -76,8 +81,21 @@ namespace ShopApi.Controllers
             };
             _context.Add(newUser);
             await _context.SaveChangesAsync();
-            // 6. Return new valid JWT
-            return new ObjectResult(_authService.GenerateToken(newUser.userID.ToString()));
+            // 6. Return new valid JWT within a User object
+            return new ObjectResult(new Models.Public.Response.AuthedUser
+            {
+                id = newUser.userID,
+                username = newUser.username,
+                token = _authService.GenerateToken(newUser.userID.ToString()),
+            });
+        }
+
+        [Route("/ping")]
+        [HttpGet]
+        public IActionResult Ping()
+        {
+            Console.WriteLine("server pinged");
+            return Ok();
         }
     }
 }

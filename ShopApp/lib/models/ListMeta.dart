@@ -1,6 +1,5 @@
 import 'package:http/http.dart' as http;
 import 'package:family_list/util/urls.dart';
-import 'package:family_list/util/local_storage.dart';
 import 'dart:convert';
 
 class ListsMetadata {
@@ -20,14 +19,14 @@ class ListsMetadata {
 
 class UserLists {
   // Retrieve the lists associated with the logged in user.
-  static Future<List<ListsMetadata>> getLists() async {
-    final response = await http.get(getListsURL, headers: {
-      "Authorization": await getAuthToken()
-    }).timeout(const Duration(seconds: 3));
-    // print(response.statusCode);
-    // print(response.body);
+  static Future<List<ListsMetadata>> getLists(String token) async {
+    final response = await http.get(getListsURL,
+        headers: {"Authorization": "Bearer $token"}).timeout(const Duration(seconds: 3));
+    print("list token: " + token);
+    print(response.statusCode);
 
     if (response.statusCode == 200) {
+      print(response.body);
       Iterable i = json.decode(response.body);
       List<ListsMetadata> lists =
           i.map((i) => ListsMetadata.fromJson(i)).toList();

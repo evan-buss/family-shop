@@ -15,7 +15,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<AppUser>(
       builder: (context, user, child) {
-        if (user != null && user.token != null) {
+        if (user.state == AppState.LOGGED_IN) {
           return OverviewScreen();
         }
         return FirstScreen();
