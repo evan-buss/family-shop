@@ -140,6 +140,7 @@ class AppUser with ChangeNotifier {
       print("creating new family");
       var createReq = await http.post(createFamilyURL,
           headers: {
+            "Content-Type": "application/json",
             "authorization": "Bearer $token",
           },
           body: data.familyName);

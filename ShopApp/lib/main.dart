@@ -1,4 +1,5 @@
 import 'package:family_list/screens/account/login_screen.dart';
+import 'package:family_list/widgets/create_list_modal.dart';
 import 'package:family_list/widgets/list_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -7,7 +8,7 @@ import 'package:family_list/screens/family_screen.dart';
 import 'package:family_list/screens/home/home_screen.dart';
 import 'package:family_list/screens/personal_screen.dart';
 
-import 'package:family_list/models/AppUser.dart';
+import 'package:family_list/models/app_user.dart';
 import 'package:family_list/widgets/app_drawer.dart';
 
 void main() {
@@ -20,17 +21,19 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      builder: (context) => AppUser(),
-      child: MaterialApp(
-        title: 'Shopping List',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primarySwatch: Colors.blueGrey,
-        ),
-        home: PageContainer(),
-      ),
-    );
+    return MultiProvider(
+        providers: [
+          ChangeNotifierProvider(builder: (context) => AppUser()),
+          Provider(builder: (context) => List()),
+        ],
+        child: MaterialApp(
+          title: 'Shopping List',
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            primarySwatch: Colors.blueGrey,
+          ),
+          home: PageContainer(),
+        ));
   }
 }
 
@@ -95,9 +98,15 @@ class _PageContainerState extends State<PageContainer> {
           Provider.of<AppUser>(context).state == AppState.LOGGED_IN
               ? IconButton(
                   icon: Icon(Icons.add_circle),
+                  tooltip: "New List",
                   color: Colors.white,
                   onPressed: () {
-                    print("create new list");
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return CreateListModal();
+                      },
+                    );
                   },
                 )
               : Container(),

@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:family_list/models/ListItem.dart';
+import 'package:family_list/models/list.dart';
 import 'package:flutter/material.dart';
 
 import 'package:family_list/util/urls.dart';
@@ -34,7 +34,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
     var response;
     var token = "takdfj";
     try {
-      response = await http.get(personalListURL, headers: {
+      response = await http.get(getListsURL, headers: {
         "Authorization": token
       }).timeout(const Duration(seconds: 2));
     } on TimeoutException catch (_) {

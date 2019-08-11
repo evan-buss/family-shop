@@ -1,2 +1,7 @@
 Core Functionality:
     ☐ Only refresh when necessary!!
+
+Design:
+    ☐ Load all family items into a model
+        - My Items - filter only the items you've created
+        - 

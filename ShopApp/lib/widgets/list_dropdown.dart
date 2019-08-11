@@ -1,6 +1,6 @@
 import 'package:family_list/main.dart';
-import 'package:family_list/models/AppUser.dart';
-import 'package:family_list/models/ListMeta.dart';
+import 'package:family_list/models/app_user.dart';
+import 'package:family_list/models/list_meta.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -11,15 +11,16 @@ class ListDropdown extends StatelessWidget {
       builder: (context, user, _) {
         if (user.state == AppState.LOGGED_IN) {
           return FutureBuilder(
-            future: UserLists.getLists(user.token),
-            builder: (context, AsyncSnapshot<List<ListsMetadata>> snapshot) {
+            future: ListsCollection.getLists(user.token),
+            builder: (context, AsyncSnapshot<List<ListMetadata>> snapshot) {
               if (snapshot.data != null) {
-                return PopupMenuButton<ListsMetadata>(
+                return PopupMenuButton<ListMetadata>(
+                    enabled: snapshot.data.length > 0,
                     icon: Icon(Icons.list),
                     tooltip: "Family's Lists",
                     itemBuilder: (BuildContext context) {
-                      return snapshot.data.map<PopupMenuItem<ListsMetadata>>(
-                          (ListsMetadata list) {
+                      return snapshot.data.map<PopupMenuItem<ListMetadata>>(
+                          (ListMetadata list) {
                         return PopupMenuItem(
                           value: list,
                           child: Text(list.title),

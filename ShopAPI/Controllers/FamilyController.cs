@@ -57,6 +57,7 @@ namespace ShopApi.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateFamily([FromBody] string name)
         {
+            Console.WriteLine("Name: " + name);
             var success = await _service.CreateFamily(getID(), name);
             if (success)
             {
