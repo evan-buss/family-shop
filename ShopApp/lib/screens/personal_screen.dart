@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:family_list/util/local_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:family_list/models/ListItem.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +32,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
   Future<List<ListItem>> retrievePersonalItems() async {
     print("refresh");
     var response;
-    var token = await getAuthToken();
+    var token = "takdfj";
     try {
       response = await http.get(personalListURL, headers: {
         "Authorization": token
@@ -95,7 +94,6 @@ class _PersonalScreenState extends State<PersonalScreen> {
                   builder: (BuildContext context) {
                     return _itemCard(context);
                   });
-              print(sheetController);
               sheetController.closed.then((void wow) {
                 print("wow");
               });

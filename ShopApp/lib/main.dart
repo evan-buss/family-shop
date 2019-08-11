@@ -1,19 +1,13 @@
-import 'dart:convert';
-import 'package:family_list/screens/login_screen.dart';
-import 'package:family_list/screens/signup_screen.dart';
+import 'package:family_list/screens/account/login_screen.dart';
+import 'package:family_list/widgets/list_dropdown.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
 import 'package:family_list/screens/family_screen.dart';
-import 'package:family_list/screens/home_screen.dart';
+import 'package:family_list/screens/home/home_screen.dart';
 import 'package:family_list/screens/personal_screen.dart';
 
-import 'package:family_list/util/urls.dart';
-import 'package:family_list/util/local_storage.dart';
 import 'package:family_list/models/AppUser.dart';
-import 'package:family_list/models/ListItem.dart';
-import 'package:family_list/models/ListMeta.dart';
 import 'package:family_list/widgets/app_drawer.dart';
 
 void main() {
@@ -75,61 +69,40 @@ class _PageContainerState extends State<PageContainer> {
     _pageController.jumpToPage(page);
   }
 
-  // Create a new item, depending on the current page it makes different API calls
-  void _createItem() async {
-    var item = new ListItem(
-      description: "FAB",
-      title: DateTime.now().toString(),
-    );
-    final response = await http.post(personalListURL,
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": await getAuthToken()
-        },
-        body: json.encode(item.toJson()));
+  // // Create a new item, depending on the current page it makes different API calls
+  // void _createItem() async {
+  //   var item = new ListItem(
+  //     description: "FAB",
+  //     title: DateTime.now().toString(),
+  //   );
+  //   final response = await http.post(personalListURL,
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         "Authorization": await getAuthToken()
+  //       },
+  //       body: json.encode(item.toJson()));
 
-    print(json.encode(item.toJson()));
-    print('Response status ${response.statusCode}');
-  }
-
-  // Load the user's lists
-  Widget _listDropDownBuilder() {
-    return Consumer<AppUser>(
-      builder: (context, user, _) {
-        if (user.state == AppState.LOGGED_IN) {
-          return FutureBuilder(
-            future: UserLists.getLists(user.token),
-            builder: (context, AsyncSnapshot<List<ListsMetadata>> snapshot) {
-              print(user.token);
-              if (snapshot.data != null) {
-                return PopupMenuButton<ListsMetadata>(
-                    icon: Icon(Icons.list),
-                    tooltip: "Family's Lists",
-                    itemBuilder: (BuildContext context) {
-                      return snapshot.data.map<PopupMenuItem<ListsMetadata>>(
-                          (ListsMetadata list) {
-                        return PopupMenuItem(
-                          value: list,
-                          child: Text(list.title),
-                        );
-                      }).toList();
-                    });
-              }
-              return LoginButton();
-            },
-          );
-        }
-        return LoginButton();
-      },
-    );
-  }
+  //   print(json.encode(item.toJson()));
+  //   print('Response status ${response.statusCode}');
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(titles[_activePage]),
-        actions: <Widget>[_listDropDownBuilder()],
+        actions: <Widget>[
+          Provider.of<AppUser>(context).state == AppState.LOGGED_IN
+              ? IconButton(
+                  icon: Icon(Icons.add_circle),
+                  color: Colors.white,
+                  onPressed: () {
+                    print("create new list");
+                  },
+                )
+              : Container(),
+          ListDropdown()
+        ],
       ),
       body: new PageView(
         onPageChanged: (int page) {
@@ -172,7 +145,9 @@ class _PageContainerState extends State<PageContainer> {
         child: FloatingActionButton(
           tooltip: 'New Item',
           child: Icon(Icons.add),
-          onPressed: _createItem,
+          onPressed: () {
+            print("add item");
+          },
         ),
       ),
     );

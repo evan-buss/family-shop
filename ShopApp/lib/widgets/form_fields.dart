@@ -1,6 +1,7 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:family_list/models/AppUser.dart';
 import 'package:flutter/material.dart';
+import 'package:family_list/util/text_styles.dart';
 
 import 'package:family_list/widgets/utils.dart';
 
@@ -82,7 +83,125 @@ class EmailField extends StatelessWidget {
       textCapitalization: TextCapitalization.none,
       textInputAction: TextInputAction.next,
       decoration: InputDecoration(
-          hintText: 'johnsmith@gmail.com', icon: Icon(Icons.people)),
+          hintText: 'johnsmith@gmail.com', icon: Icon(Icons.email)),
+    );
+  }
+}
+
+class FamilyCreateFields extends StatefulWidget {
+  final SignUpData data;
+  FamilyCreateFields(this.data);
+  @override
+  _FamilyCreateFieldsState createState() => _FamilyCreateFieldsState();
+}
+
+/// Display a toggle switch to switch between creating a new family or joining an existing family.
+class _FamilyCreateFieldsState extends State<FamilyCreateFields> {
+  bool createNew = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
+          children: <Widget>[
+            Text(
+              "Join Existing",
+              style: h3,
+            ),
+            Switch(
+              value: createNew,
+              onChanged: (bool isToggled) {
+                if (isToggled) {
+                  widget.data.familyName = null;
+                } else {
+                  widget.data.inviteCode = null;
+                }
+                setState(() {
+                  createNew = isToggled;
+                });
+              },
+            ),
+            Text("Create New", style: h3)
+          ],
+        ),
+        createNew ? CreateFamily(widget.data) : JoinFamily(widget.data)
+      ],
+    );
+  }
+}
+
+/// Create a brand new family.
+class CreateFamily extends StatelessWidget {
+  final SignUpData _data;
+
+  CreateFamily(this._data);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.only(bottom: 24.0, top: 24.0),
+          child: Column(
+            children: <Widget>[
+              Text(
+                "Family Name",
+                style: h3,
+              ),
+              TextFormField(
+                autocorrect: false,
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Please enter a family name.';
+                  }
+                  return null;
+                },
+                onSaved: (value) => _data.familyName = value.trim(),
+                textInputAction: TextInputAction.next,
+                textCapitalization: TextCapitalization.words,
+                decoration: InputDecoration(
+                    hintText: 'Smith Family', icon: Icon(Icons.people)),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// Join an existing family by invite code.
+class JoinFamily extends StatelessWidget {
+  final SignUpData _data;
+
+  JoinFamily(this._data);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        Text(
+          "Family Invite Code",
+          style: h3,
+        ),
+        TextFormField(
+          autocorrect: false,
+          validator: (value) {
+            if (value.isEmpty) {
+              return 'Please enter a family description.';
+            }
+            return null;
+          },
+          onSaved: (value) => _data.inviteCode = value.trim(),
+          textInputAction: TextInputAction.next,
+          textCapitalization: TextCapitalization.words,
+          decoration:
+              InputDecoration(hintText: '312312312', icon: Icon(Icons.people)),
+        ),
+      ],
     );
   }
 }

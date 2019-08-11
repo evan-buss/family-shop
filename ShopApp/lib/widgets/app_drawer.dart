@@ -1,5 +1,7 @@
+import 'package:family_list/models/AppUser.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:provider/provider.dart';
 
 // App Drawer that provides quick account information
 class AppDrawer extends StatelessWidget {
@@ -27,36 +29,38 @@ class AppDrawer extends StatelessWidget {
       padding: EdgeInsets.zero,
       children: <Widget>[
         DrawerHeader(
-          child: FutureBuilder<String>(
-              future: getName(),
-              builder: (context, snapshot) {
-                if (snapshot.data != null) {
-                  return Text(
-                    snapshot.data,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: "ProductSans",
-                        fontSize: 30),
-                  );
-                }
-                return Text(
-                  "Please Sign In",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontFamily: "ProductSans",
-                      fontSize: 30),
-                );
-              }),
+          child: Consumer<AppUser>(
+            builder: (context, user, _) {
+              return Text(
+                user.state == AppState.LOGGED_IN
+                    ? "Greetings, " + user.username.split(" ")[0]
+                    : "Please Sign In",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: "ProductSans",
+                    fontSize: 30),
+              );
+            },
+          ),
           decoration: BoxDecoration(color: Colors.blue),
         ),
         ListTile(
           title: Text("Family"),
+          leading: Icon(Icons.people),
+        ),
+        // Consumer<AppUser>(
+        //   builder: (context, user, _) {},
+        // ),
+        ListTile(
+          title: Text("Settings"),
+          leading: Icon(Icons.settings),
         ),
         ListTile(
           title: Text("Log Out"),
-        ),
-        ListTile(
-          title: Text("Settings"),
+          leading: Icon(Icons.exit_to_app),
+          onTap: () {
+            Provider.of<AppUser>(context, listen: true).logOut();
+          },
         ),
       ],
     );

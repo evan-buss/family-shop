@@ -1,8 +1,8 @@
 import 'package:family_list/models/AppUser.dart';
 import 'package:flutter/material.dart';
 
-import 'package:family_list/screens/first_screen.dart';
-import 'package:family_list/screens/overview_screen.dart';
+import 'package:family_list/screens/home/first_screen.dart';
+import 'package:family_list/screens/home/overview_screen.dart';
 
 import 'package:provider/provider.dart';
 

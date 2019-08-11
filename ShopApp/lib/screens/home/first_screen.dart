@@ -1,5 +1,5 @@
-import 'package:family_list/screens/login_screen.dart';
-import 'package:family_list/screens/signup_screen.dart';
+import 'package:family_list/screens/account/login_screen.dart';
+import 'package:family_list/screens/account/signup_screen.dart';
 import 'package:family_list/widgets/picture_card.dart';
 import 'package:flutter/material.dart';
 

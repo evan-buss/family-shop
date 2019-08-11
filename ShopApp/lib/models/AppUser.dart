@@ -13,25 +13,31 @@ class LoginData {
 
 class SignUpData extends LoginData {
   String name;
+  String familyName;
+  String inviteCode;
 }
 
 enum AppState { LOGGED_IN, LOGGED_OUT }
 
 class AppUser with ChangeNotifier {
   int userID;
+  int familyID;
   String email;
   String password;
   String token;
   String username;
 
   AppState state = AppState.LOGGED_OUT;
-
   final storage = new FlutterSecureStorage();
 
   AppUser() {
     _loadIfCached();
   }
 
+  /// Load the user's data into memory if available.
+  ///
+  /// Also checks if the stored JWT is still valid and not expired.
+  /// If the token has expired, log the user in again and get a new one.
   void _loadIfCached() async {
     this.token = await storage.read(key: "token");
     if (token != null) {
@@ -39,7 +45,7 @@ class AppUser with ChangeNotifier {
           await http.get(pingURL, headers: {"Authorization": "Bearer $token"});
 
       if (response.statusCode == 200) {
-        // User is authenticate
+        // User's saved data is valid, load into memory
         this.userID = int.parse(await storage.read(key: "id"));
         this.email = await storage.read(key: "email");
         this.password = await storage.read(key: "password");
@@ -47,14 +53,17 @@ class AppUser with ChangeNotifier {
         state = AppState.LOGGED_IN;
         notifyListeners();
       } else if (response.statusCode == 401) {
-        //Unauthorized. Attempt to log in again to refresh token...
+        // Unauthorized. Attempt to log in again to refresh token...
         print("REFRESHING JWT !!!");
         var success = await _logWithSavedInfo();
+        if (!success) {
+          print("unable to refresh TOKEN");
+        }
       }
     }
   }
 
-  // Log the user out of the app. Remove all their data from secure storage.
+  /// Log out and remove all locally stored user data.
   void logOut() async {
     await storage.delete(key: "userID");
     await storage.delete(key: "email");
@@ -71,7 +80,7 @@ class AppUser with ChangeNotifier {
     notifyListeners();
   }
 
-  // Use the stored username and password to try to relog-in.
+  /// Log the user in with locally stored info.
   Future<bool> _logWithSavedInfo() async {
     final response = await http.post(signInURL, headers: {
       "Content-Type": "application/x-www-form-urlencoded"
@@ -80,9 +89,11 @@ class AppUser with ChangeNotifier {
       "password": await storage.read(key: "password")
     }).timeout(new Duration(seconds: 4));
 
-    // Save the info to local storage if login successful.
+    // Save the new token to local storage if login successful.
     if (response.statusCode == 200) {
-      // TODO: Set the appropriate variables and storage if success...
+      var data = json.decode(response.body);
+      this.token = data["json"];
+      await storage.write(key: "token", value: this.token);
       return true;
     }
     return false;
@@ -104,7 +115,6 @@ class AppUser with ChangeNotifier {
       }
       callback(response.statusCode);
     } catch (_) {
-      print("error");
       callback(503);
     }
   }
@@ -122,9 +132,33 @@ class AppUser with ChangeNotifier {
     if (response.statusCode == 200) {
       _parseServerResponse(response.body, data);
       state = AppState.LOGGED_IN;
-      notifyListeners();
-      callback();
     }
+
+    print("New family name: " + data.familyName);
+
+    if (data.familyName != null) {
+      print("creating new family");
+      var createReq = await http.post(createFamilyURL,
+          headers: {
+            "authorization": "Bearer $token",
+          },
+          body: data.familyName);
+      print(createReq.statusCode);
+      if (createReq.statusCode == 200) {
+        print("create family success");
+      }
+    } else if (data.inviteCode != null) {
+      print("joining existing family: " + data.inviteCode);
+      var joinReq = await http.put(joinFamilyURL + data.inviteCode, headers: {
+        "Content-Type": "application/json",
+        "authorization": "Bearer $token",
+      });
+      if (joinReq.statusCode == 200) {
+        print("join family success");
+      }
+    }
+    notifyListeners();
+    callback();
   }
 
   // Save the user's form data and the server's response data on successful log in / sign up

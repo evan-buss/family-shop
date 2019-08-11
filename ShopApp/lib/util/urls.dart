@@ -6,6 +6,10 @@ final String signUpURL = "http://$address:$port/signup";
 final String signInURL = "http://$address:$port/signin";
 final String pingURL = "http://$address:$port/ping";
 
+// Family URLS
+final String createFamilyURL = "http://$address:$port/api/family/";
+final String joinFamilyURL = "http://$address:$port/api/family/";
+
 // List URLS
 final String personalListURL = "http://$address:$port/api/personal";
 final String getListsURL = "http://$address:$port/api/list";

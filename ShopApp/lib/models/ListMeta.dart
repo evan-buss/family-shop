@@ -20,13 +20,10 @@ class ListsMetadata {
 class UserLists {
   // Retrieve the lists associated with the logged in user.
   static Future<List<ListsMetadata>> getLists(String token) async {
-    final response = await http.get(getListsURL,
-        headers: {"Authorization": "Bearer $token"}).timeout(const Duration(seconds: 3));
-    print("list token: " + token);
-    print(response.statusCode);
-
+    final response = await http.get(getListsURL, headers: {
+      "Authorization": "Bearer $token"
+    }).timeout(const Duration(seconds: 3));
     if (response.statusCode == 200) {
-      print(response.body);
       Iterable i = json.decode(response.body);
       List<ListsMetadata> lists =
           i.map((i) => ListsMetadata.fromJson(i)).toList();

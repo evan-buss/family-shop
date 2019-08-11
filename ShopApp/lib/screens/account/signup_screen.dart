@@ -70,7 +70,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       textInputAction: TextInputAction.next,
                       textCapitalization: TextCapitalization.words,
                       decoration: InputDecoration(
-                          hintText: 'John Smith', icon: Icon(Icons.people)),
+                          hintText: 'John Smith', icon: Icon(Icons.person)),
                     ),
                   ],
                 ),
@@ -91,6 +91,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               Text("Password",
                   style: TextStyle(fontFamily: "ProductSans", fontSize: 18)),
               PasswordField(_data, _passwordFocus),
+              FamilyCreateFields(_data),
               Padding(
                 padding: const EdgeInsets.only(top: 12),
                 child: RaisedButton(
