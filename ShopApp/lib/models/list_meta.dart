@@ -24,7 +24,7 @@ class ListMetadata {
 class ListsCollection {
   /// Retrieve the lists associated with the logged in user.
   static Future<List<ListMetadata>> getLists(String token) async {
-    final response = await http.get(getListsURL, headers: {
+    final response = await http.get(listsURL, headers: {
       "Authorization": "Bearer $token"
     }).timeout(const Duration(seconds: 3));
 
@@ -41,7 +41,7 @@ class ListsCollection {
   static Future<int> createList(
       String title, String description, BuildContext context) async {
     var token = Provider.of<AppUser>(context).token;
-    final response = await http.post(createListURL,
+    final response = await http.post(listsURL,
         headers: {
           "authorization": "Bearer $token",
           "Content-Type": "application/json"

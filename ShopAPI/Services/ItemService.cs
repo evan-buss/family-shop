@@ -48,7 +48,7 @@ namespace ShopApi.Services
             return null;
         }
 
-        public async Task<bool> AddPersonalItem(Models.Public.Request.Item item, long userID)
+        public async Task<Models.Public.Response.Item> AddPersonalItem(Models.Public.Request.Item item, long userID)
         {
             var user = _context.Users.Find(userID);
             var family = _context.Families.Where(q => q.members.Contains(user)).FirstOrDefault();
@@ -60,10 +60,14 @@ namespace ShopApi.Services
                     var dbItem = item.ToDatabase(user, list);
                     _context.ListItems.Add(dbItem);
                     await _context.SaveChangesAsync();
-                    return true;
+                    return new Models.Public.Response.Item{
+                        itemID = dbItem.itemID,
+                        title = dbItem.title,
+                        description = dbItem.description
+                    };
                 }
             }
-            return false;
+            return null;
         }
     }
 }

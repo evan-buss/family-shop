@@ -1,5 +1,6 @@
 import 'package:family_list/main.dart';
 import 'package:family_list/models/app_user.dart';
+import 'package:family_list/models/list.dart';
 import 'package:family_list/models/list_meta.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +19,10 @@ class ListDropdown extends StatelessWidget {
                     enabled: snapshot.data.length > 0,
                     icon: Icon(Icons.list),
                     tooltip: "Family's Lists",
+                    onSelected: (selection) {
+                      Provider.of<ActiveList>(context)
+                          .loadList(selection, user.token);
+                    },
                     itemBuilder: (BuildContext context) {
                       return snapshot.data.map<PopupMenuItem<ListMetadata>>(
                           (ListMetadata list) {

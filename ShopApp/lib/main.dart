@@ -1,3 +1,4 @@
+import 'package:family_list/models/list.dart';
 import 'package:family_list/screens/account/login_screen.dart';
 import 'package:family_list/widgets/create_list_modal.dart';
 import 'package:family_list/widgets/list_dropdown.dart';
@@ -6,7 +7,7 @@ import 'package:provider/provider.dart';
 
 import 'package:family_list/screens/family_screen.dart';
 import 'package:family_list/screens/home/home_screen.dart';
-import 'package:family_list/screens/personal_screen.dart';
+import 'package:family_list/screens/personal_list_screen.dart';
 
 import 'package:family_list/models/app_user.dart';
 import 'package:family_list/widgets/app_drawer.dart';
@@ -23,8 +24,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
+          ChangeNotifierProvider(builder: (context) => ActiveList(context)),
           ChangeNotifierProvider(builder: (context) => AppUser()),
-          Provider(builder: (context) => List()),
         ],
         child: MaterialApp(
           title: 'Shopping List',
@@ -72,28 +73,15 @@ class _PageContainerState extends State<PageContainer> {
     _pageController.jumpToPage(page);
   }
 
-  // // Create a new item, depending on the current page it makes different API calls
-  // void _createItem() async {
-  //   var item = new ListItem(
-  //     description: "FAB",
-  //     title: DateTime.now().toString(),
-  //   );
-  //   final response = await http.post(personalListURL,
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         "Authorization": await getAuthToken()
-  //       },
-  //       body: json.encode(item.toJson()));
-
-  //   print(json.encode(item.toJson()));
-  //   print('Response status ${response.statusCode}');
-  // }
-
   @override
   Widget build(BuildContext context) {
+    // var title = "list title";
+    var selectedListLitle =
+        Provider.of<ActiveList>(context, listen: true).metaData?.title ?? "";
+    var pageTitle = _activePage != 0 ? selectedListLitle : titles[_activePage];
     return Scaffold(
       appBar: AppBar(
-        title: Text(titles[_activePage]),
+        title: Text(pageTitle),
         actions: <Widget>[
           Provider.of<AppUser>(context).state == AppState.LOGGED_IN
               ? IconButton(
@@ -155,7 +143,9 @@ class _PageContainerState extends State<PageContainer> {
           tooltip: 'New Item',
           child: Icon(Icons.add),
           onPressed: () {
-            print("add item");
+            var token = Provider.of<AppUser>(context).token;
+            Provider.of<ActiveList>(context)
+                .addItem("test", "test descr", token);
           },
         ),
       ),

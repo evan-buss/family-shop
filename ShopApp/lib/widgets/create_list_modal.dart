@@ -11,6 +11,14 @@ class _CreateListModalState extends State<CreateListModal> {
   final name = TextEditingController();
   final description = TextEditingController();
 
+  // Destroy text controllers on dipose
+  @override
+  void dispose() {
+    super.dispose();
+    name.dispose();
+    description.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(

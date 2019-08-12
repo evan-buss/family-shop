@@ -7,9 +7,10 @@ final String signInURL = "http://$address:$port/signin/";
 final String pingURL = "http://$address:$port/ping/";
 
 // Family URLS
-final String createFamilyURL = "http://$address:$port/api/family/";
-final String joinFamilyURL = "http://$address:$port/api/family/";
+final String familyURL = "http://$address:$port/api/family/";
 
 // List URLS
-final String getListsURL = "http://$address:$port/api/list/";
-final String createListURL = "http://$address:$port/api/list/";
+final String listsURL = "http://$address:$port/api/list/";
+
+// Item URLS
+final String itemsURL = "http://$address:$port/api/item/";

@@ -1,10 +1,13 @@
 import 'dart:convert';
 
+import 'package:family_list/models/list.dart';
+import 'package:family_list/models/list_meta.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:family_list/util/urls.dart';
+import 'package:provider/provider.dart';
 
 class LoginData {
   String email;
@@ -137,26 +140,17 @@ class AppUser with ChangeNotifier {
     print("New family name: " + data.familyName);
 
     if (data.familyName != null) {
-      print("creating new family");
-      var createReq = await http.post(createFamilyURL,
+      await http.post(familyURL,
           headers: {
             "Content-Type": "application/json",
             "authorization": "Bearer $token",
           },
           body: data.familyName);
-      print(createReq.statusCode);
-      if (createReq.statusCode == 200) {
-        print("create family success");
-      }
     } else if (data.inviteCode != null) {
-      print("joining existing family: " + data.inviteCode);
-      var joinReq = await http.put(joinFamilyURL + data.inviteCode, headers: {
+      await http.put(familyURL + data.inviteCode, headers: {
         "Content-Type": "application/json",
         "authorization": "Bearer $token",
       });
-      if (joinReq.statusCode == 200) {
-        print("join family success");
-      }
     }
     notifyListeners();
     callback();

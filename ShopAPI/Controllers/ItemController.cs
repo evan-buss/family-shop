@@ -54,13 +54,13 @@ namespace ShopApi.Controllers
 
         // POST api/personal
         [HttpPost]
-        public async Task<ActionResult> PostListItem([FromBody] Models.Public.Request.Item item)
+        public async Task<ActionResult<Models.Public.Response.Item>> PostListItem([FromBody] Models.Public.Request.Item item)
         {
 
             var newItem = await _service.AddPersonalItem(item, getID());
-            if (newItem)
+            if (newItem != null)
             {
-                return Ok();
+                return new CreatedResult("/api/item/" + newItem.itemID, newItem);
             }
             return BadRequest();
         }
