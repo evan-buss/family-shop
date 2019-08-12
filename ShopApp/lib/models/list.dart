@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:core';
 
 import 'package:family_list/models/list_meta.dart';
 import 'package:family_list/util/urls.dart';
@@ -46,12 +47,12 @@ class ActiveList with ChangeNotifier {
         items = jsonBody["items"]
             .map<ListItem>((json) => new ListItem.fromJson(json))
             .toList();
-        print(items);
         notifyListeners();
       }
     }
   }
 
+  /// Create a new item in the currently selected list
   void addItem(String title, String description, String token) async {
     var item = new ListItem(
       description: "FAB",
@@ -65,6 +66,20 @@ class ActiveList with ChangeNotifier {
         body: json.encode(item.toJson(_metaData.listID)));
     if (response.statusCode == 201) {
       items.add(ListItem.fromJson(json.decode(response.body)));
+      notifyListeners();
+    }
+  }
+
+  /// Delete a specific item from the list
+  void deleteItem(ListItem item) async {
+    final response = await http.delete(
+      itemsURL + item.itemID.toString(),
+      headers: {"Authorization": "Bearer $_token"},
+    );
+    print(response.statusCode);
+    // 204 = No Content
+    if (response.statusCode == 204) {
+      items.remove(item);
       notifyListeners();
     }
   }

@@ -40,13 +40,54 @@ class _PersonalScreenState extends State<PersonalScreen> {
           return ListView.builder(
               itemCount: list.items.length,
               itemBuilder: (context, index) {
-                return ListTile(
-                  onLongPress: () {},
-                  onTap: () {
-                    print("tapped");
+                return Dismissible(
+                  key: ObjectKey(list.items[index]),
+                  background: Container(
+                    color: Colors.red,
+                  ),
+                  onDismissed: (direction) {
+                    bool doDelete = true;
+
+                    var item = list.items[index]; // Save a copy of the item
+                    setState(() {
+                      list.items
+                          .removeAt(index); //Remove the item from the list
+                    });
+
+                    // Allow user to undo deletion
+                    Scaffold.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Item removed.'),
+                        duration: Duration(seconds: 5),
+                        action: SnackBarAction(
+                          label: 'Undo',
+                          textColor: Colors.blue,
+                          onPressed: () {
+                            doDelete = false;
+                            setState(() {
+                              list.items.insert(
+                                  index, item); // Don't delete, re-insert item
+                            });
+                          },
+                        ),
+                      ),
+                    );
+                    // Wait 5 seconds to actuall delete the item
+                    Future.delayed(Duration(seconds: 5), () {
+                      print("delayed running");
+                      if (doDelete) {
+                        list.deleteItem(
+                            list.items[index]); // Send request to server
+                      }
+                    });
                   },
-                  title: Text(list.items[index].title),
-                  subtitle: Text(list.items[index].description),
+                  child: ListTile(
+                    onTap: () {
+                      //  TODO: Show details/edit screen
+                    },
+                    title: Text(list.items[index].title),
+                    subtitle: Text(list.items[index].description),
+                  ),
                 );
               });
         }

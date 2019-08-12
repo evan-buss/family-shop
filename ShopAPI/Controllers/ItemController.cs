@@ -65,7 +65,7 @@ namespace ShopApi.Controllers
             return BadRequest();
         }
 
-        // DELETE api/personal/Item
+        // DELETE api/item/5
         [HttpDelete("{itemID}")]
         public async Task<IActionResult> DeleteListItem(long itemID)
         {
