@@ -15,6 +15,7 @@ class ListDropdown extends StatelessWidget {
             future: ListsCollection.getLists(user.token),
             builder: (context, AsyncSnapshot<List<ListMetadata>> snapshot) {
               if (snapshot.data != null) {
+                // Create dropdown menu containing all of the family's lists
                 return PopupMenuButton<ListMetadata>(
                     enabled: snapshot.data.length > 0,
                     icon: Icon(Icons.list),
@@ -33,7 +34,7 @@ class ListDropdown extends StatelessWidget {
                       }).toList();
                     });
               }
-              return LoginButton();
+              return Container();
             },
           );
         }

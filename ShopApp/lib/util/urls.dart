@@ -8,6 +8,8 @@ final String pingURL = "http://$address:$port/ping/";
 
 // Family URLS
 final String familyURL = "http://$address:$port/api/family/";
+final String familyMembersURL = "http://$address:$port/api/family/users";
+
 
 // List URLS
 final String listsURL = "http://$address:$port/api/list/";

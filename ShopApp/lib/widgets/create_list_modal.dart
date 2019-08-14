@@ -1,6 +1,9 @@
+import 'package:family_list/models/app_user.dart';
 import 'package:family_list/models/list_meta.dart';
 import 'package:family_list/util/text_styles.dart';
+import 'package:family_list/widgets/list_dropdown.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CreateListModal extends StatefulWidget {
   @override
@@ -55,8 +58,10 @@ class _CreateListModalState extends State<CreateListModal> {
               onPressed: () async {
                 var status = await ListsCollection.createList(
                     name.text, description.text, context);
+
                 if (status == 200) {
                   Navigator.pop(context);
+                  Provider.of<AppUser>(context).newListCreated();
                 }
               },
             ),

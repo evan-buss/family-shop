@@ -172,4 +172,9 @@ class AppUser with ChangeNotifier {
     await storage.write(key: "token", value: this.token);
     await storage.write(key: "username", value: this.username);
   }
+
+  // Notify listeners to update the state when the user creates a new list
+  void newListCreated() {
+    notifyListeners();
+  }
 }
