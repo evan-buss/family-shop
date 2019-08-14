@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class ProfileIcon extends StatelessWidget {
   final String name;
@@ -25,11 +24,6 @@ class ProfileIcon extends StatelessWidget {
         label: Text(name),
       );
     }
-    // return CircleAvatar(
-    //   backgroundImage: NetworkImage("https://i.imgur.com/BoN9kdC.png"),
-
-    // );
-
     return Chip(
       avatar: CircleAvatar(
           backgroundImage: NetworkImage("https://i.imgur.com/BoN9kdC.png")),

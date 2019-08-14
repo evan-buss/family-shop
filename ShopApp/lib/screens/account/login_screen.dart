@@ -23,9 +23,9 @@ class _LoginScreenState extends State<LoginScreen> {
   // Contact server to log in
   void _logIn() async {
     // Save all of the current form values (calls individual "onSave" attributes)
-
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
+      // Callback. Either go back or show the error code.
       Provider.of<AppUser>(context, listen: true).login(_data,
           (int statusCode) {
         if (statusCode == 200) {

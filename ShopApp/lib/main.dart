@@ -1,7 +1,9 @@
 import 'package:family_list/models/list.dart';
 import 'package:family_list/screens/account/login_screen.dart';
+import 'package:family_list/screens/create_item_screen.dart';
 import 'package:family_list/widgets/create_list_modal.dart';
 import 'package:family_list/widgets/list_dropdown.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -30,9 +32,8 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
           title: 'Shopping List',
           debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            primarySwatch: Colors.blueGrey,
-          ),
+          // TODO: Toggle switch between light and dark
+          theme: ThemeData.dark(),
           home: PageContainer(),
         ));
   }
@@ -48,7 +49,6 @@ class PageContainer extends StatefulWidget {
 
 // _PageContainerState holds all the views and the navigation bar
 class _PageContainerState extends State<PageContainer> {
-  final List<String> titles = ["Home", "Personal List", "Family List"];
   PageController _pageController;
   static int _activePage = 0;
   static const TextStyle optionStyle =
@@ -75,10 +75,12 @@ class _PageContainerState extends State<PageContainer> {
 
   @override
   Widget build(BuildContext context) {
-    // var title = "list title";
+    // Determine which list is currently active
     var selectedListLitle =
         Provider.of<ActiveList>(context, listen: true).metaData?.title ?? "";
-    var pageTitle = _activePage != 0 ? selectedListLitle : titles[_activePage];
+    // Show "Home" only on the home screen
+    var pageTitle = _activePage != 0 ? selectedListLitle : "Home";
+
     return Scaffold(
       appBar: AppBar(
         title: Text(pageTitle),
@@ -143,9 +145,9 @@ class _PageContainerState extends State<PageContainer> {
           tooltip: 'New Item',
           child: Icon(Icons.add),
           onPressed: () {
-            var token = Provider.of<AppUser>(context).token;
-            Provider.of<ActiveList>(context)
-                .addItem("test", "test descr", token);
+            // Show the new item creation screen.
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => CreateItemScreen()));
           },
         ),
       ),

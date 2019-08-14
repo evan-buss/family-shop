@@ -54,10 +54,7 @@ class ActiveList with ChangeNotifier {
 
   /// Create a new item in the currently selected list
   void addItem(String title, String description, String token) async {
-    var item = new ListItem(
-      description: "FAB",
-      title: DateTime.now().toString(),
-    );
+    var item = new ListItem(description: title, title: description);
     final response = await http.post(itemsURL,
         headers: {
           "Content-Type": "application/json",

@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:family_list/models/app_user.dart';
 import 'package:flutter/rendering.dart';
 import 'package:family_list/models/list.dart';
 import 'package:flutter/material.dart';
@@ -55,29 +54,34 @@ class _PersonalScreenState extends State<PersonalScreen> {
                     });
 
                     // Allow user to undo deletion
-                    Scaffold.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Item removed.'),
-                        duration: Duration(seconds: 5),
-                        action: SnackBarAction(
-                          label: 'Undo',
-                          textColor: Colors.blue,
-                          onPressed: () {
-                            doDelete = false;
-                            setState(() {
-                              list.items.insert(
-                                  index, item); // Don't delete, re-insert item
-                            });
-                          },
+                    Scaffold.of(context)
+                      ..removeCurrentSnackBar()
+                      ..showSnackBar(
+                        SnackBar(
+                          content: Text('Item removed.'),
+                          duration: Duration(seconds: 3),
+                          action: SnackBarAction(
+                            label: 'Undo',
+                            textColor: Colors.blue,
+                            onPressed: () {
+                              doDelete = false;
+                              setState(() {
+                                if (list.items.length >= index) {
+                                  list.items.insert(index,
+                                      item); // Don't delete, re-insert item
+                                } else {
+                                  list.items.add(item);
+                                }
+                              });
+                            },
+                          ),
                         ),
-                      ),
-                    );
+                      );
                     // Wait 5 seconds to actuall delete the item
-                    Future.delayed(Duration(seconds: 5), () {
+                    Future.delayed(Duration(seconds: 3), () {
                       print("delayed running");
                       if (doDelete) {
-                        list.deleteItem(
-                            list.items[index]); // Send request to server
+                        list.deleteItem(item); // Send request to server
                       }
                     });
                   },
