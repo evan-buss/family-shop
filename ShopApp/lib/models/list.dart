@@ -12,9 +12,7 @@ class ActiveList with ChangeNotifier {
   bool isLoading = false;
   String _token;
 
-  BuildContext _context;
-
-  ActiveList(this._context);
+  ActiveList();
 
   get metaData => _metaData;
 

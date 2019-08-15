@@ -54,30 +54,26 @@ class FirstScreen extends StatelessWidget {
           text: "Welcome to Family Shop",
           assetString: "assets/images/cart.png",
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Expanded(
-              child: _stepCard("Create Account", Icons.create, () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => SignUpScreen()));
-              }, halfsize: true),
-            ),
-            Expanded(
-              child: _stepCard("Log In", Icons.account_box, () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => LoginScreen()));
-              }),
-            ),
-          ],
+        _stepCard(
+          "Create Account",
+          Icons.create,
+          () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => SignUpScreen(),
+              ),
+            );
+          },
         ),
-        _stepCard("Create a family", Icons.people, () {
-          print("Creating family");
-        }),
-        _stepCard("Invite members to your family to share lists.", Icons.list,
-            () {
-          print("Inviting peoples");
-        })
+        _stepCard(
+          "Log In",
+          Icons.account_box,
+          () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => LoginScreen()));
+          },
+        ),
       ],
     );
   }

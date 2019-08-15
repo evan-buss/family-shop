@@ -1,7 +1,6 @@
 import 'package:family_list/models/app_user.dart';
 import 'package:family_list/models/list_meta.dart';
 import 'package:family_list/util/text_styles.dart';
-import 'package:family_list/widgets/list_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -24,48 +23,71 @@ class _CreateListModalState extends State<CreateListModal> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 10,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      margin: EdgeInsets.only(top: 128, bottom: 128, left: 64, right: 64),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Text(
-              "Create List",
-              style: h2,
-            ),
-            Text(
-              "Name",
-              style: h3,
-            ),
-            TextField(
-              controller: name,
-            ),
-            Text(
-              "Description",
-              style: h3,
-            ),
-            TextField(
-              controller: description,
-            ),
-            RaisedButton(
-              child: Text("Create"),
-              onPressed: () async {
-                var status = await ListsCollection.createList(
-                    name.text, description.text, context);
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Card(
+          elevation: 10,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          margin: EdgeInsets.only(left: 8, right: 8),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  "Create List",
+                  style: h2,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 8),
+                  child: Column(
+                    children: <Widget>[
+                      Text(
+                        "Name",
+                        style: h3,
+                      ),
+                      TextField(
+                        controller: name,
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 8),
+                  child: Column(
+                    children: <Widget>[
+                      Text(
+                        "Description",
+                        style: h3,
+                      ),
+                      TextField(
+                        controller: description,
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: RaisedButton(
+                    child: Text("Create"),
+                    onPressed: () async {
+                      var status = await ListsCollection.createList(
+                          name.text, description.text, context);
 
-                if (status == 200) {
-                  Navigator.pop(context);
-                  Provider.of<AppUser>(context).newListCreated();
-                }
-              },
+                      if (status == 200) {
+                        Navigator.pop(context);
+                        Provider.of<AppUser>(context).newListCreated();
+                      }
+                    },
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
-      ),
+      ],
     );
   }
 }

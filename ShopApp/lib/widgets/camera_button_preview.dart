@@ -44,7 +44,9 @@ class _CameraButtonPreviewState extends State<CameraButtonPreview> {
             onTap: () => _getImagePath(snapshot.data),
             child: Container(
               height: 355.5,
-              decoration: BoxDecoration(color: Theme.of(context).accentColor),
+              decoration: imagePath == null
+                  ? BoxDecoration(color: Theme.of(context).primaryColorLight)
+                  : null,
               child: imagePath == null
                   ? Icon(Icons.camera_alt)
                   : Image.file(

@@ -1,13 +1,10 @@
 import 'dart:convert';
 
-import 'package:family_list/models/list.dart';
-import 'package:family_list/models/list_meta.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:family_list/util/urls.dart';
-import 'package:provider/provider.dart';
 
 class LoginData {
   String email;

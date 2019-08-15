@@ -1,3 +1,4 @@
+import 'package:family_list/models/app_settings.dart';
 import 'package:family_list/models/list.dart';
 import 'package:family_list/screens/account/login_screen.dart';
 import 'package:family_list/screens/create_item_screen.dart';
@@ -25,17 +26,22 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-        providers: [
-          ChangeNotifierProvider(builder: (context) => ActiveList(context)),
-          ChangeNotifierProvider(builder: (context) => AppUser()),
-        ],
-        child: MaterialApp(
-          title: 'Shopping List',
-          debugShowCheckedModeBanner: false,
-          // TODO: Toggle switch between light and dark
-          theme: ThemeData.dark(),
-          home: PageContainer(),
-        ));
+      providers: [
+        ChangeNotifierProvider(builder: (context) => ActiveList()),
+        ChangeNotifierProvider(builder: (context) => AppUser()),
+        ChangeNotifierProvider(builder: (context) => AppSettings()),
+      ],
+      child: Consumer<AppSettings>(
+        builder: (context, settings, _) {
+          return MaterialApp(
+            title: 'Shopping List',
+            debugShowCheckedModeBanner: false,
+            theme: settings.isDark ? ThemeData.dark() : ThemeData.light(),
+            home: PageContainer(),
+          );
+        },
+      ),
+    );
   }
 }
 
@@ -138,7 +144,8 @@ class _PageContainerState extends State<PageContainer> {
         ],
       ),
       floatingActionButton: Visibility(
-        visible: _fabIsVisible,
+        // Only show on the list screens and when a list is selected
+        visible: _fabIsVisible && Provider.of<ActiveList>(context).metaData != null,
         child: FloatingActionButton(
           tooltip: 'New Item',
           child: Icon(Icons.add),
@@ -158,7 +165,10 @@ class LoginButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FlatButton(
-      child: Text("LOG IN"),
+      child: Text(
+        "LOG IN",
+        style: Theme.of(context).textTheme.button.copyWith(color: Colors.white),
+      ),
       onPressed: () => Navigator.push(
         context,
         MaterialPageRoute(

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
+import 'package:family_list/models/app_settings.dart';
 import 'package:family_list/models/app_user.dart';
-import 'package:family_list/models/family.dart';
 import 'package:family_list/util/urls.dart';
 import 'package:family_list/widgets/profile_icon.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +38,33 @@ class AppDrawer extends StatelessWidget {
     return null;
   }
 
+  Widget _themeSwitch(AppSettings settings) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: <Widget>[
+        Text(
+          "Theme",
+          style: TextStyle(fontWeight: FontWeight.w400),
+        ),
+        Padding(
+          padding: EdgeInsets.only(left: 16),
+          child: Row(
+            children: <Widget>[
+              Icon(Icons.brightness_low),
+              Switch(
+                value: settings.isDark,
+                onChanged: (bool isToggled) {
+                  settings.isDark = isToggled;
+                },
+              ),
+              Icon(Icons.brightness_high),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<AppUser>(
@@ -50,11 +77,10 @@ class AppDrawer extends StatelessWidget {
                 user.state == AppState.LOGGED_IN
                     ? "Greetings, " + user.username.split(" ")[0]
                     : "Please Sign In",
-                style: TextStyle(
-                    fontFamily: "ProductSans",
-                    fontSize: 30),
+                style: TextStyle(fontFamily: "ProductSans", fontSize: 30),
               ),
-              decoration: BoxDecoration(color: Theme.of(context).primaryColorLight),
+              decoration:
+                  BoxDecoration(color: Theme.of(context).primaryColorLight),
             ),
             ListTile(
               title: Text("Family Members"),
@@ -80,17 +106,22 @@ class AppDrawer extends StatelessWidget {
                     ),
                   )
                 : Container(),
+            Divider(),
+            ListTile(
+              title: Text("Settings"),
+              leading: Icon(Icons.settings),
+            ),
+            Consumer<AppSettings>(
+              builder: (context, settings, _) {
+                return _themeSwitch(settings);
+              },
+            ),
             child
           ],
         );
       },
       child: Column(
         children: <Widget>[
-          Divider(),
-          ListTile(
-            title: Text("Settings"),
-            leading: Icon(Icons.settings),
-          ),
           Divider(),
           ListTile(
             title: Text("Log Out"),

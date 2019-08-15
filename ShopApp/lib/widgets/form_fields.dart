@@ -139,34 +139,28 @@ class CreateFamily extends StatelessWidget {
 
   CreateFamily(this._data);
 
+// TODO: FIX THIS
   @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(bottom: 24.0, top: 24.0),
-          child: Column(
-            children: <Widget>[
-              Text(
-                "Family Name",
-                style: h3,
-              ),
-              TextFormField(
-                autocorrect: false,
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Please enter a family name.';
-                  }
-                  return null;
-                },
-                onSaved: (value) => _data.familyName = value.trim(),
-                textInputAction: TextInputAction.next,
-                textCapitalization: TextCapitalization.words,
-                decoration: InputDecoration(
-                    hintText: 'Smith Family', icon: Icon(Icons.people)),
-              ),
-            ],
-          ),
+        Text(
+          "Family Name",
+          style: h3,
+        ),
+        TextFormField(
+          autocorrect: false,
+          validator: (value) {
+            if (value.isEmpty) {
+              return 'Please enter a family name.';
+            }
+            return null;
+          },
+          onSaved: (value) => _data.familyName = value.trim(),
+          textInputAction: TextInputAction.next,
+          textCapitalization: TextCapitalization.words,
+          decoration: InputDecoration(
+              hintText: 'Smith Family', icon: Icon(Icons.people)),
         ),
       ],
     );

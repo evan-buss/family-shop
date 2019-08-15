@@ -52,28 +52,48 @@ class _CreateItemScreenState extends State<CreateItemScreen> {
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(28),
+          padding: EdgeInsets.all(8),
           child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                // Take a picture
-                CameraButtonPreview(),
-                Text("Item Information", style: h2),
-                Text(
-                  "Title",
-                  style: h3,
-                  textAlign: TextAlign.left,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              // Take a picture
+              CameraButtonPreview(),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text("Item Information", style: h2),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      "Title",
+                      style: h3,
+                      textAlign: TextAlign.left,
+                    ),
+                    TextFormField(
+                      controller: _titleController,
+                      focusNode: _titleFocus,
+                    ),
+                  ],
                 ),
-                TextFormField(
-                  controller: _titleController,
-                  focusNode: _titleFocus,
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text("Description", style: h3),
+                    TextFormField(
+                      controller: _descriptionController,
+                      focusNode: _descriptionFocus,
+                    ),
+                  ],
                 ),
-                Text("Description", style: h3),
-                TextFormField(
-                  controller: _descriptionController,
-                  focusNode: _descriptionFocus,
-                ),
-              ]),
+              ),
+            ],
+          ),
         ),
       ),
     );

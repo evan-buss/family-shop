@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:camera/camera.dart';
-import 'package:family_list/screens/picture_crop_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' show join;
 import 'package:path_provider/path_provider.dart';
