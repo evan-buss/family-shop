@@ -42,7 +42,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
                 return Dismissible(
                   key: ObjectKey(list.items[index]),
                   background: Container(
-                    color: Colors.red,
+                    color: Theme.of(context).errorColor,
                   ),
                   onDismissed: (direction) {
                     bool doDelete = true;
@@ -62,7 +62,6 @@ class _PersonalScreenState extends State<PersonalScreen> {
                           duration: Duration(seconds: 3),
                           action: SnackBarAction(
                             label: 'Undo',
-                            textColor: Colors.blue,
                             onPressed: () {
                               doDelete = false;
                               setState(() {

@@ -15,10 +15,9 @@ class ProfileIcon extends StatelessWidget {
     if (this.name != null) {
       return Chip(
         avatar: CircleAvatar(
-          backgroundColor: Colors.blue,
+          backgroundColor: Theme.of(context).accentColor,
           child: Text(
             getInitials(),
-            style: TextStyle(color: Colors.white),
           ),
         ),
         label: Text(name),

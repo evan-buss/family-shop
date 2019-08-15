@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:family_list/screens/camera_screen.dart';
+import 'package:family_list/screens/picture_crop_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 
@@ -17,44 +18,43 @@ class _CameraButtonPreviewState extends State<CameraButtonPreview> {
     return cameras.first;
   }
 
+  void _getImagePath(data) async {
+    // Delete existing image if they take another one.
+    if (imagePath != null) File(imagePath).delete();
+    imagePath = await Navigator.push(context,
+        MaterialPageRoute(builder: (context) => CameraScreen(camera: data)));
+    if (imagePath != null) {
+      imagePath = await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => PictureCropScreen(imagePath)));
+      if (imagePath != null) {
+        setState(() {});
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<CameraDescription>(
       future: _loadCameras(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return Container(
-              width: 500,
-              height: 500,
-              decoration: BoxDecoration(color: Colors.teal),
+          return GestureDetector(
+            onTap: () => _getImagePath(snapshot.data),
+            child: Container(
+              height: 355.5,
+              decoration: BoxDecoration(color: Theme.of(context).accentColor),
               child: imagePath == null
-                  ? Center(
-                      child: IconButton(
-                        icon: Icon(Icons.camera),
-                        onPressed: () async {
-                          imagePath = await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      CameraScreen(camera: snapshot.data)));
-                          if (imagePath != null) {
-                            setState(() {});
-                          }
-                        },
-                      ),
-                    )
-                  : Image.file(File(imagePath)));
+                  ? Icon(Icons.camera_alt)
+                  : Image.file(
+                      File(imagePath),
+                    ),
+            ),
+          );
         }
         return Container();
       },
     );
-
-    // return Container(
-    //   width: 500,
-    //   height: 500,
-    //   child: Image.file(
-    //     File(imagePath),
-    //   ),
-    // );
   }
 }

@@ -75,15 +75,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: RaisedButton(
                   child: Text("LOG IN"),
                   onPressed: _logIn,
-                  color: Colors.blue,
-                  textColor: Colors.white,
                 ),
               ),
               Visibility(
                 child: Text(
                   this.errorString,
                   style:
-                      TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+                      TextStyle(color: Theme.of(context).errorColor, fontWeight: FontWeight.bold),
                 ),
                 visible: this.errorString.isNotEmpty,
               )

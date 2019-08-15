@@ -51,11 +51,10 @@ class AppDrawer extends StatelessWidget {
                     ? "Greetings, " + user.username.split(" ")[0]
                     : "Please Sign In",
                 style: TextStyle(
-                    color: Colors.white,
                     fontFamily: "ProductSans",
                     fontSize: 30),
               ),
-              decoration: BoxDecoration(color: Colors.blue),
+              decoration: BoxDecoration(color: Theme.of(context).primaryColorLight),
             ),
             ListTile(
               title: Text("Family Members"),

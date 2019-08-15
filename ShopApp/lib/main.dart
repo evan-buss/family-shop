@@ -89,7 +89,6 @@ class _PageContainerState extends State<PageContainer> {
               ? IconButton(
                   icon: Icon(Icons.add_circle),
                   tooltip: "New List",
-                  color: Colors.white,
                   onPressed: () {
                     showDialog(
                       context: context,
@@ -123,7 +122,6 @@ class _PageContainerState extends State<PageContainer> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _activePage,
         onTap: _handlePageSelection,
-        selectedItemColor: Colors.blueAccent,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -160,7 +158,7 @@ class LoginButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FlatButton(
-      child: Text("LOG IN", style: TextStyle(color: Colors.white)),
+      child: Text("LOG IN"),
       onPressed: () => Navigator.push(
         context,
         MaterialPageRoute(

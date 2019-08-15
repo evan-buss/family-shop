@@ -97,8 +97,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 child: RaisedButton(
                   child: Text("SIGN UP"),
                   onPressed: _signUp,
-                  color: Colors.blue,
-                  textColor: Colors.white,
                 ),
               ),
             ],

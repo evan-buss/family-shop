@@ -53,8 +53,6 @@ class _CreateListModalState extends State<CreateListModal> {
             ),
             RaisedButton(
               child: Text("Create"),
-              color: Colors.blue,
-              textColor: Colors.white,
               onPressed: () async {
                 var status = await ListsCollection.createList(
                     name.text, description.text, context);

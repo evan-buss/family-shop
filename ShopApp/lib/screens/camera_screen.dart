@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:camera/camera.dart';
+import 'package:family_list/screens/picture_crop_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' show join;
 import 'package:path_provider/path_provider.dart';
@@ -85,15 +86,9 @@ class CameraScreenState extends State<CameraScreen> {
 
             // Attempt to take a picture and log where it's been saved.
             await _controller.takePicture(path);
-
             // If the picture was taken, display it on a new screen.
-            Navigator.pop(context, path);
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (context) => DisplayPictureScreen(imagePath: path),
-            //   ),
-            // );
+            debugPrint("ORIGINAL" + path);
+            Navigator.pop(context, path);            
           } catch (e) {
             // If an error occurs, log the error to the console.
             print(e);

@@ -1,5 +1,4 @@
 import 'package:camera/camera.dart';
-import 'package:family_list/screens/camera_screen.dart';
 import 'package:family_list/util/text_styles.dart';
 import 'package:family_list/widgets/camera_button_preview.dart';
 import 'package:flutter/material.dart';
@@ -55,8 +54,9 @@ class _CreateItemScreenState extends State<CreateItemScreen> {
         child: SingleChildScrollView(
           padding: EdgeInsets.all(28),
           child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
+                // Take a picture
                 CameraButtonPreview(),
                 Text("Item Information", style: h2),
                 Text(
