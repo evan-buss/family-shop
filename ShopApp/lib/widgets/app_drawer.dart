@@ -8,18 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
-class FamilyMember {
-  int userID;
-  String name;
-
-  FamilyMember({this.userID, this.name});
-
-  factory FamilyMember.fromJson(Map<String, dynamic> json) {
-    return FamilyMember(
-        userID: int.parse(json["userID"]), name: json["username"]);
-  }
-}
-
 // App Drawer that provides quick account information
 class AppDrawer extends StatelessWidget {
   Future<List<Widget>> getFamilyMembers(BuildContext context) async {
