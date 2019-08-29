@@ -10,6 +10,17 @@ A collaborative weekly shopping list for families.
 
 <img src="https://github.com/evan-buss/family-shop/blob/master/images/home.png" height="600">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://github.com/evan-buss/family-shop/blob/master/images/list.png" height="600">
 
+## Getting Started
+
+App
+  - Install Packages: `flutter pub get`
+  - Run App: `flutter run`
+
+API
+  - Start: `docker-compose up`
+  - Stop: `docker-compose down`
+  - Reset DB: `docker-compose down -v`
+
 ## Mobile Application
 
 The mobile application is written in Dart using the Flutter framework from Google.

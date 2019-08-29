@@ -1,4 +1,7 @@
+import 'dart:ui';
+
 import 'package:family_list/models/app_user.dart';
+import 'package:family_list/models/list.dart';
 import 'package:family_list/models/list_meta.dart';
 import 'package:family_list/util/text_styles.dart';
 import 'package:flutter/material.dart';
@@ -73,13 +76,15 @@ class _CreateListModalState extends State<CreateListModal> {
                   child: RaisedButton(
                     child: Text("Create"),
                     onPressed: () async {
-                      var status = await ListsCollection.createList(
+                      var newListMeta = await ListsCollection.createList(
                           name.text, description.text, context);
 
-                      if (status == 200) {
+                      if (newListMeta != null) {
                         Navigator.pop(context);
-                        Provider.of<AppUser>(context).newListCreated();
+                        var token = Provider.of<AppUser>(context).token;
+                        Provider.of<ActiveList>(context).loadList(newListMeta, token);
                       }
+                      // TODO: Show error message otherwise
                     },
                   ),
                 ),

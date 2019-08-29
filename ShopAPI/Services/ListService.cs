@@ -43,7 +43,7 @@ namespace ShopApi.Services
             return null;
         }
 
-        public async Task<bool> CreateList(Models.Public.Request.List list, string userID)
+        public async Task<Models.Public.Response.ListMetadata> CreateList(Models.Public.Request.List list, string userID)
         {
             var user = _context.Users.Find(long.Parse(userID));
             var family = _context.Families.Where(q => q.members.Contains(user)).FirstOrDefault();
@@ -53,9 +53,9 @@ namespace ShopApi.Services
                 family.lists.Add(dbList);
                 _context.Families.Update(family);
                 await _context.SaveChangesAsync();
-                return true;
+                return dbList.GetMetadata();
             }
-            return false;
+            return null;
         }
 
         // Remove a list by its listID

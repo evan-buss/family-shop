@@ -34,19 +34,23 @@ class ListsCollection {
           i.map((i) => ListMetadata.fromJson(i)).toList();
       return lists;
     }
-    throw Exception("unable to load lists");
+    return null;
   }
 
   /// Create a new list with title and description
-  static Future<int> createList(
+  static Future<ListMetadata> createList(
       String title, String description, BuildContext context) async {
     var token = Provider.of<AppUser>(context).token;
+    print(token);
     final response = await http.post(listsURL,
         headers: {
           "authorization": "Bearer $token",
           "Content-Type": "application/json"
         },
         body: json.encode({"title": title, "description": description}));
-    return response.statusCode;
+    if (response.statusCode == 200) {
+      return ListMetadata.fromJson(json.decode(response.body));
+    }
+    return null;
   }
 }

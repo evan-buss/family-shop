@@ -1,5 +1,5 @@
-// final String address = "10.0.2.2";
-final String address = "192.168.1.40";
+final String address = "10.0.2.2";
+// final String address = "192.168.1.40";
 final String port = "5001";
 
 // Authentication URLS
