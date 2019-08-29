@@ -3,7 +3,7 @@
 A collaborative weekly shopping list for families.
 
 - Flutter
-- Dotnet Core
+- .NET Core
 - Docker / Docker Compose
 
 ## Early Screenshots
