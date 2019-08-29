@@ -91,7 +91,8 @@ class _PageContainerState extends State<PageContainer> {
       appBar: AppBar(
         title: Text(pageTitle),
         actions: <Widget>[
-          Provider.of<AppUser>(context).state == AppState.LOGGED_IN
+          Provider.of<AppUser>(context).state == AppState.LOGGED_IN &&
+                  _activePage != 0
               ? IconButton(
                   icon: Icon(Icons.add_circle),
                   tooltip: "New List",
@@ -105,7 +106,7 @@ class _PageContainerState extends State<PageContainer> {
                   },
                 )
               : Container(),
-          ListDropdown()
+          ListDropdown(_activePage)
         ],
       ),
       body: new PageView(
@@ -145,7 +146,8 @@ class _PageContainerState extends State<PageContainer> {
       ),
       floatingActionButton: Visibility(
         // Only show on the list screens and when a list is selected
-        visible: _fabIsVisible && Provider.of<ActiveList>(context).metaData != null,
+        visible:
+            _fabIsVisible && Provider.of<ActiveList>(context).metaData != null,
         child: FloatingActionButton(
           tooltip: 'New Item',
           child: Icon(Icons.add),

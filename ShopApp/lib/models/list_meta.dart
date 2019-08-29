@@ -40,17 +40,18 @@ class ListsCollection {
   /// Create a new list with title and description
   static Future<ListMetadata> createList(
       String title, String description, BuildContext context) async {
-    var token = Provider.of<AppUser>(context).token;
-    print(token);
-    final response = await http.post(listsURL,
-        headers: {
-          "authorization": "Bearer $token",
-          "Content-Type": "application/json"
-        },
-        body: json.encode({"title": title, "description": description}));
-    if (response.statusCode == 200) {
-      return ListMetadata.fromJson(json.decode(response.body));
-    }
+    try {
+      var token = Provider.of<AppUser>(context).token;
+      final response = await http.post(listsURL,
+          headers: {
+            "authorization": "Bearer $token",
+            "Content-Type": "application/json"
+          },
+          body: json.encode({"title": title, "description": description}));
+      if (response.statusCode == 200) {
+        return ListMetadata.fromJson(json.decode(response.body));
+      }
+    } catch (ex) {}
     return null;
   }
 }

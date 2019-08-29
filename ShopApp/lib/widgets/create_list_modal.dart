@@ -15,6 +15,7 @@ class CreateListModal extends StatefulWidget {
 class _CreateListModalState extends State<CreateListModal> {
   final name = TextEditingController();
   final description = TextEditingController();
+  bool isError = false;
 
   // Destroy text controllers on dipose
   @override
@@ -71,6 +72,15 @@ class _CreateListModalState extends State<CreateListModal> {
                     ],
                   ),
                 ),
+                Visibility(
+                  child: Text(
+                    "Error creating new list...",
+                    style: TextStyle(
+                        color: Theme.of(context).errorColor,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  visible: isError,
+                ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: RaisedButton(
@@ -82,9 +92,13 @@ class _CreateListModalState extends State<CreateListModal> {
                       if (newListMeta != null) {
                         Navigator.pop(context);
                         var token = Provider.of<AppUser>(context).token;
-                        Provider.of<ActiveList>(context).loadList(newListMeta, token);
+                        Provider.of<ActiveList>(context)
+                            .loadList(newListMeta, token);
+                      } else {
+                        setState(() {
+                          isError = true;
+                        });
                       }
-                      // TODO: Show error message otherwise
                     },
                   ),
                 ),

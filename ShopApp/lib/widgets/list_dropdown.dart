@@ -6,6 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ListDropdown extends StatelessWidget {
+  final int _activePage;
+
+  ListDropdown(this._activePage);
+
   @override
   Widget build(BuildContext context) {
     return Consumer<AppUser>(
@@ -14,7 +18,7 @@ class ListDropdown extends StatelessWidget {
           return FutureBuilder(
             future: ListsCollection.getLists(user.token),
             builder: (context, AsyncSnapshot<List<ListMetadata>> snapshot) {
-              if (snapshot.data != null) {
+              if (snapshot.data != null && _activePage != 0) {
                 // Create dropdown menu containing all of the family's lists
                 return PopupMenuButton<ListMetadata>(
                     enabled: snapshot.data.length > 0,

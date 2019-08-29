@@ -41,24 +41,30 @@ class AppUser with ChangeNotifier {
   void _loadIfCached() async {
     this.token = await storage.read(key: "token");
     if (token != null) {
-      final response =
-          await http.get(pingURL, headers: {"Authorization": "Bearer $token"});
+      http.Response response;
 
-      if (response.statusCode == 200) {
-        // User's saved data is valid, load into memory
-        this.userID = int.parse(await storage.read(key: "id"));
-        this.email = await storage.read(key: "email");
-        this.password = await storage.read(key: "password");
-        this.username = await storage.read(key: "username");
-        state = AppState.LOGGED_IN;
-        notifyListeners();
-      } else if (response.statusCode == 401) {
-        // Unauthorized. Attempt to log in again to refresh token...
-        print("REFRESHING JWT !!!");
-        var success = await _logWithSavedInfo();
-        if (!success) {
-          print("unable to refresh TOKEN");
+      try {
+        response = await http
+            .get(pingURL, headers: {"Authorization": "Bearer $token"});
+
+        if (response.statusCode == 200) {
+          // Load the valid saved data to memory
+          this.userID = int.parse(await storage.read(key: "id"));
+          this.email = await storage.read(key: "email");
+          this.password = await storage.read(key: "password");
+          this.username = await storage.read(key: "username");
+          state = AppState.LOGGED_IN;
+          notifyListeners();
+        } else if (response.statusCode == 401) {
+          // Unauthorized. Attempt to log in again to refresh token...
+          print("REFRESHING JWT !!!");
+          var success = await _logWithSavedInfo();
+          if (!success) {
+            print("unable to refresh TOKEN");
+          }
         }
+      } catch (ex) {
+        // Server is probably down...
       }
     }
   }
