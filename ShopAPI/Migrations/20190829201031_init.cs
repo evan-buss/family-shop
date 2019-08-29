@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace ShopApi.Migrations
 {
-    public partial class first : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,7 +14,7 @@ namespace ShopApi.Migrations
                 {
                     listID = table.Column<long>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    name = table.Column<string>(nullable: true),
+                    title = table.Column<string>(nullable: true),
                     description = table.Column<string>(nullable: true),
                     familyID = table.Column<long>(nullable: true)
                 },
@@ -69,7 +69,7 @@ namespace ShopApi.Migrations
                     title = table.Column<string>(nullable: true),
                     description = table.Column<string>(nullable: true),
                     listID = table.Column<long>(nullable: true),
-                    userID = table.Column<long>(nullable: false)
+                    userID = table.Column<long>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -85,7 +85,7 @@ namespace ShopApi.Migrations
                         column: x => x.userID,
                         principalTable: "Users",
                         principalColumn: "userID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(

@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:camera/camera.dart';
 import 'package:family_list/util/text_styles.dart';
 import 'package:family_list/widgets/camera_button_preview.dart';
@@ -25,10 +28,20 @@ class _CreateItemScreenState extends State<CreateItemScreen> {
 
   AppUser appUser;
   ActiveList list;
+  String imagePath;
 
-  void _addItem(BuildContext context) {
+  // Convert the image file to bytes
+  Future<Uint8List> fileToBytes(String path) async {
+    return await File(path).readAsBytes();
+  }
+
+  void _addItem(BuildContext context) async {
     list.addItem(
-        _titleController.text, _descriptionController.text, appUser.token);
+      _titleController.text,
+      _descriptionController.text,
+      await fileToBytes(imagePath),
+      appUser.token,
+    );
     Navigator.pop(context);
   }
 
@@ -57,7 +70,11 @@ class _CreateItemScreenState extends State<CreateItemScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               // Take a picture
-              CameraButtonPreview(),
+              CameraButtonPreview((path) {
+                setState(() {
+                  imagePath = path;
+                });
+              }),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text("Item Information", style: h2),

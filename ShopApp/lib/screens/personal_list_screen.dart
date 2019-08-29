@@ -83,6 +83,9 @@ class _PersonalScreenState extends State<PersonalScreen> {
                     },
                     title: Text(list.items[index].title),
                     subtitle: Text(list.items[index].description),
+                    leading: list.items[index].image.isNotEmpty
+                        ? Image.memory(list.items[index].image)
+                        : Placeholder(),
                   ),
                 );
               });

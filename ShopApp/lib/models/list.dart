@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:core';
+import 'dart:typed_data';
 
 import 'package:family_list/models/list_meta.dart';
 import 'package:family_list/util/urls.dart';
@@ -51,8 +52,10 @@ class ActiveList with ChangeNotifier {
   }
 
   /// Create a new item in the currently selected list
-  void addItem(String title, String description, String token) async {
-    var item = new ListItem(description: title, title: description);
+  void addItem(String title, String description, Uint8List imageBytes,
+      String token) async {
+    var item =
+        new ListItem(description: title, title: description, image: imageBytes);
     final response = await http.post(itemsURL,
         headers: {
           "Content-Type": "application/json",
@@ -84,8 +87,9 @@ class ListItem {
   final int itemID;
   final String title;
   final String description;
+  final Uint8List image;
 
-  ListItem({this.itemID, this.title, this.description});
+  ListItem({this.itemID, this.title, this.description, this.image});
 
   /// Convert a json object to a ListItem.
   ///
@@ -94,12 +98,17 @@ class ListItem {
     return ListItem(
         itemID: json['itemID'],
         title: json['title'],
-        description: json['description']);
+        description: json['description'],
+        image: base64.decode(json['image']));
   }
 
   /// Covert a ListItem to JSON.
   ///
   /// Used for converting object to API request.
-  Map<String, String> toJson(int listID) =>
-      {'listID': listID.toString(), 'title': title, 'description': description};
+  Map<String, String> toJson(int listID) => {
+        'listID': listID.toString(),
+        'title': title,
+        'description': description,
+        'image': base64.encode(image)
+      };
 }

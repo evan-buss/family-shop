@@ -10,8 +10,8 @@ using ShopApi.Models;
 namespace ShopApi.Migrations
 {
     [DbContext(typeof(FamilyShopContext))]
-    [Migration("20190805184729_new1")]
-    partial class new1
+    [Migration("20190829201136_init2")]
+    partial class init2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -62,11 +62,13 @@ namespace ShopApi.Migrations
 
                     b.Property<string>("description");
 
+                    b.Property<byte[]>("image");
+
                     b.Property<long?>("listID");
 
                     b.Property<string>("title");
 
-                    b.Property<long>("userID");
+                    b.Property<long?>("userID");
 
                     b.HasKey("itemID");
 
@@ -121,8 +123,7 @@ namespace ShopApi.Migrations
 
                     b.HasOne("ShopApi.Models.Database.User", "user")
                         .WithMany()
-                        .HasForeignKey("userID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("userID");
                 });
 
             modelBuilder.Entity("ShopApi.Models.Database.User", b =>

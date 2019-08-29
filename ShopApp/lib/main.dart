@@ -4,7 +4,6 @@ import 'package:family_list/screens/account/login_screen.dart';
 import 'package:family_list/screens/create_item_screen.dart';
 import 'package:family_list/widgets/create_list_modal.dart';
 import 'package:family_list/widgets/list_dropdown.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

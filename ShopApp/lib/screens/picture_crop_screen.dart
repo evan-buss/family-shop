@@ -6,30 +6,21 @@ import 'package:image_crop/image_crop.dart';
 class PictureCropScreen extends StatelessWidget {
   final cropKey = GlobalKey<CropState>();
   final File imageFile;
-  File _croppedFile;
 
   PictureCropScreen(String imagePath) : imageFile = File(imagePath);
 
   void _cropImage(BuildContext context) async {
-    final scale = cropKey.currentState.scale;
+    // final scale = cropKey.currentState.scale;
     final area = cropKey.currentState.area;
     if (area == null) {
       // cannot crop, widget is not setup
       return;
     }
 
-    // Resize to the desired resolution;
-    final sampledFile = await ImageCrop.sampleImage(
-      file: imageFile,
-      preferredWidth: (1080 / scale).round(),
-      preferredHeight: (1080 / scale).round(),
-    );
-
     // Do Cropping
-    _croppedFile = await ImageCrop.cropImage(file: sampledFile, area: area);
+    File _croppedFile = await ImageCrop.cropImage(file: imageFile, area: area);
 
     imageFile.delete();
-    sampledFile.delete();
 
     Navigator.pop(context, _croppedFile.path);
   }
@@ -46,7 +37,6 @@ class PictureCropScreen extends StatelessWidget {
           Expanded(
             child: Crop(
               key: cropKey,
-              // image: Image.file(File(imageFile)),
               image: FileImage(imageFile),
               aspectRatio: 1.0 / 1.0,
             ),

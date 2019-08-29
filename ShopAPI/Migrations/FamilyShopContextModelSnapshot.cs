@@ -60,11 +60,13 @@ namespace ShopApi.Migrations
 
                     b.Property<string>("description");
 
+                    b.Property<byte[]>("image");
+
                     b.Property<long?>("listID");
 
                     b.Property<string>("title");
 
-                    b.Property<long>("userID");
+                    b.Property<long?>("userID");
 
                     b.HasKey("itemID");
 
@@ -119,8 +121,7 @@ namespace ShopApi.Migrations
 
                     b.HasOne("ShopApi.Models.Database.User", "user")
                         .WithMany()
-                        .HasForeignKey("userID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("userID");
                 });
 
             modelBuilder.Entity("ShopApi.Models.Database.User", b =>
