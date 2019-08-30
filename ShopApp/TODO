@@ -8,7 +8,10 @@ Design:
 
 Future Features:
     List Items:
-        ☐ Include a picture
+        ✔ Include a picture @done(19-08-29 20:15)
+        ☐ Optional description / pictures
+            - Picture should have a placeholder
+        ☐ Decide how to separate the two list types
         ☐ Scan a bar-code
         ☐ Chose a priority
     

@@ -1,25 +1,12 @@
-import 'package:family_list/models/app_user.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:http/http.dart' as http;
-import 'package:family_list/util/urls.dart';
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
-class ListMetadata {
-  int listID;
-  String title;
-  String description;
-
-  ListMetadata({this.listID, this.title, this.description});
-
-  factory ListMetadata.fromJson(Map<String, dynamic> json) {
-    return ListMetadata(
-        listID: json['listID'],
-        title: json['title'],
-        description: json['description']);
-  }
-}
+import 'package:family_list/models/list_metadata.dart';
+import 'package:family_list/util/urls.dart';
+import 'package:family_list/models/app_user.dart';
 
 class ListsCollection {
   /// Retrieve the lists associated with the logged in user.

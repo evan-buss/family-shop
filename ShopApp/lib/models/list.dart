@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'dart:core';
-import 'dart:typed_data';
 
-import 'package:family_list/models/list_meta.dart';
-import 'package:family_list/util/urls.dart';
+import 'package:family_list/models/list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+
+import 'package:family_list/models/list_metadata.dart';
+import 'package:family_list/util/urls.dart';
 
 class ActiveList with ChangeNotifier {
   ListMetadata _metaData;
@@ -52,10 +53,7 @@ class ActiveList with ChangeNotifier {
   }
 
   /// Create a new item in the currently selected list
-  void addItem(String title, String description, Uint8List imageBytes,
-      String token) async {
-    var item =
-        new ListItem(description: title, title: description, image: imageBytes);
+  void addItem(ListItem item, String token) async {
     final response = await http.post(itemsURL,
         headers: {
           "Content-Type": "application/json",
@@ -64,6 +62,23 @@ class ActiveList with ChangeNotifier {
         body: json.encode(item.toJson(_metaData.listID)));
     if (response.statusCode == 201) {
       items.add(ListItem.fromJson(json.decode(response.body)));
+      notifyListeners();
+    }
+  }
+
+  void updateItem(ListItem item, String token) async {
+    final response = await http.put(itemsURL,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token"
+        },
+        body: json.encode(item.toJsonPut(_metaData.listID)));
+    print("UPDATE: " + response.statusCode.toString());
+
+    if (response.statusCode == 200) {
+      var index = items.indexOf(item);
+      items.remove(item);
+      items.insert(index, ListItem.fromJson(json.decode(response.body)));
       notifyListeners();
     }
   }
@@ -81,34 +96,4 @@ class ActiveList with ChangeNotifier {
       notifyListeners();
     }
   }
-}
-
-class ListItem {
-  final int itemID;
-  final String title;
-  final String description;
-  final Uint8List image;
-
-  ListItem({this.itemID, this.title, this.description, this.image});
-
-  /// Convert a json object to a ListItem.
-  ///
-  /// Used for converting API responses to Dart objects.
-  factory ListItem.fromJson(Map<String, dynamic> json) {
-    return ListItem(
-        itemID: json['itemID'],
-        title: json['title'],
-        description: json['description'],
-        image: base64.decode(json['image']));
-  }
-
-  /// Covert a ListItem to JSON.
-  ///
-  /// Used for converting object to API request.
-  Map<String, String> toJson(int listID) => {
-        'listID': listID.toString(),
-        'title': title,
-        'description': description,
-        'image': base64.encode(image)
-      };
 }

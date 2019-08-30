@@ -1,16 +1,19 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:family_list/screens/camera_screen.dart';
-import 'package:family_list/screens/picture_crop_screen.dart';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 
+import 'package:family_list/screens/camera/camera_screen.dart';
+import 'package:family_list/screens/camera/picture_crop_screen.dart';
 
 // CameraButtonPreview shows a square window that either has a button or an image
 //  Clicking the window will open the camera to take a picture
 class CameraButtonPreview extends StatefulWidget {
   final Function callback;
-  CameraButtonPreview(this.callback);
+  final Uint8List previewImage;
+  CameraButtonPreview(this.callback, {this.previewImage});
 
   @override
   _CameraButtonPreviewState createState() => _CameraButtonPreviewState();
@@ -43,6 +46,20 @@ class _CameraButtonPreviewState extends State<CameraButtonPreview> {
     }
   }
 
+  // Change the preview area based on the current state
+  Widget _currentPreview() {
+    if (imagePath == null) {
+      // No new image or previous image
+      if (widget.previewImage == null) {
+        return Icon(Icons.save);
+      }
+      // Previous image loaded from API
+      return Image.memory(widget.previewImage);
+    }
+    // New image taken
+    return Image.file(File(imagePath));
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<CameraDescription>(
@@ -52,16 +69,11 @@ class _CameraButtonPreviewState extends State<CameraButtonPreview> {
           return GestureDetector(
             onTap: () => _getImagePath(snapshot.data),
             child: Container(
-              height: 355.5,
-              decoration: imagePath == null
-                  ? BoxDecoration(color: Theme.of(context).primaryColorLight)
-                  : null,
-              child: imagePath == null
-                  ? Icon(Icons.camera_alt)
-                  : Image.file(
-                      File(imagePath),
-                    ),
-            ),
+                height: 355.5,
+                decoration: imagePath == null && widget.previewImage == null
+                    ? BoxDecoration(color: Theme.of(context).primaryColorLight)
+                    : null,
+                child: _currentPreview()),
           );
         }
         return Container();

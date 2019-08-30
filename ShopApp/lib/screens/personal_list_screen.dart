@@ -1,12 +1,14 @@
 import 'dart:async';
 
-import 'package:family_list/models/app_user.dart';
+import 'package:family_list/models/list_item.dart';
 import 'package:flutter/rendering.dart';
-import 'package:family_list/models/list.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
+import 'package:family_list/models/app_user.dart';
+import 'package:family_list/screens/create_item_screen.dart';
+import 'package:family_list/models/list.dart';
 import 'package:family_list/widgets/picture_card.dart';
-import 'package:provider/provider.dart';
 
 // PersonalScreen displays the currently signed-in users personal items.
 class PersonalScreen extends StatefulWidget {
@@ -69,23 +71,32 @@ class _PersonalScreenState extends State<PersonalScreen> {
           return ListView.builder(
               itemCount: list.items.length,
               itemBuilder: (context, index) {
-                return Dismissible(
-                  key: ObjectKey(list.items[index]),
-                  background: Container(
-                    color: Theme.of(context).errorColor,
-                  ),
-                  onDismissed: (direction) {
-                    _handleDelete(list, index);
-                  },
-                  child: ListTile(
-                    onTap: () {
-                      //  TODO: Show details/edit screen
+                return Card(
+                  child: Dismissible(
+                    key: ObjectKey(list.items[index]),
+                    background: Container(
+                      color: Theme.of(context).errorColor,
+                    ),
+                    onDismissed: (direction) {
+                      _handleDelete(list, index);
                     },
-                    title: Text(list.items[index].title),
-                    subtitle: Text(list.items[index].description),
-                    leading: list.items[index].image.isNotEmpty
-                        ? Image.memory(list.items[index].image)
-                        : Placeholder(),
+                    child: ListTile(
+                      onTap: () {
+                        // Edit the item on click
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                CreateItemScreen(listItem: list.items[index]),
+                          ),
+                        );
+                      },
+                      title: Text(list.items[index].title),
+                      subtitle: Text(list.items[index].description),
+                      leading: list.items[index].image.isNotEmpty
+                          ? Image.memory(list.items[index].image)
+                          : Placeholder(),
+                    ),
                   ),
                 );
               });
