@@ -1,20 +1,15 @@
 import 'dart:async';
 
 import 'package:family_list/models/api/list_item.dart';
-import 'package:family_list/util/text_styles.dart';
+import 'package:family_list/models/state/active_list.dart';
+import 'package:family_list/models/state/app_user.dart';
 import 'package:family_list/widgets/family_card_item.dart';
 import 'package:family_list/widgets/personal_card_item.dart';
-import 'package:family_list/widgets/profile_icon.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/rendering.dart';
-import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
-import 'package:flutter/material.dart';
-
-import 'package:family_list/models/state/app_user.dart';
-import 'package:family_list/screens/create_item_screen.dart';
-import 'package:family_list/models/state/active_list.dart';
 import 'package:family_list/widgets/picture_card.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:provider/provider.dart';
 
 // PersonalScreen displays the currently signed-in users personal items.
 class PersonalScreen extends StatefulWidget {

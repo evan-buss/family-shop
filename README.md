@@ -8,6 +8,7 @@ A collaborative weekly shopping list for families.
 
 ## Early Screenshots
 
+<!-- TODO: Update screenshots -->
 <img src="https://github.com/evan-buss/family-shop/blob/master/images/home.png" height="600">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://github.com/evan-buss/family-shop/blob/master/images/list.png" height="600">
 
 ## Getting Started
