@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:family_list/models/app_settings.dart';
-import 'package:family_list/models/app_user.dart';
+import 'package:family_list/models/state/app_settings.dart';
+import 'package:family_list/models/state/app_user.dart';
 import 'package:family_list/util/urls.dart';
 import 'package:family_list/widgets/profile_icon.dart';
 import 'package:flutter/material.dart';

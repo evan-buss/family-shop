@@ -1,5 +1,5 @@
 import 'package:email_validator/email_validator.dart';
-import 'package:family_list/models/app_user.dart';
+import 'package:family_list/models/state/app_user.dart';
 import 'package:flutter/material.dart';
 import 'package:family_list/util/text_styles.dart';
 

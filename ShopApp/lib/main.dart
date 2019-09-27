@@ -1,18 +1,16 @@
-import 'package:family_list/models/app_settings.dart';
-import 'package:family_list/models/list.dart';
+import 'package:family_list/models/state/active_list.dart';
+import 'package:family_list/models/state/app_settings.dart';
+import 'package:family_list/models/state/app_user.dart';
 import 'package:family_list/screens/account/login_screen.dart';
 import 'package:family_list/screens/create_item_screen.dart';
+import 'package:family_list/screens/family_screen.dart';
+import 'package:family_list/screens/home/home_screen.dart';
+import 'package:family_list/screens/personal_list_screen.dart';
+import 'package:family_list/widgets/app_drawer.dart';
 import 'package:family_list/widgets/create_list_modal.dart';
 import 'package:family_list/widgets/list_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import 'package:family_list/screens/family_screen.dart';
-import 'package:family_list/screens/home/home_screen.dart';
-import 'package:family_list/screens/personal_list_screen.dart';
-
-import 'package:family_list/models/app_user.dart';
-import 'package:family_list/widgets/app_drawer.dart';
 
 void main() {
   runApp(MyApp());
@@ -81,10 +79,10 @@ class _PageContainerState extends State<PageContainer> {
   @override
   Widget build(BuildContext context) {
     // Determine which list is currently active
-    var selectedListLitle =
+    var selectedListTitle =
         Provider.of<ActiveList>(context, listen: true).metaData?.title ?? "";
     // Show "Home" only on the home screen
-    var pageTitle = _activePage != 0 ? selectedListLitle : "Home";
+    var pageTitle = _activePage != 0 ? selectedListTitle : "Home";
 
     return Scaffold(
       appBar: AppBar(

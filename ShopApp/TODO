@@ -4,7 +4,9 @@ Core Functionality:
 Design:
     ☐ Load all family items into a model
         - My Items - filter only the items you've created
-        - 
+        -
+
+    - Show date/time and creator on each item
 
 Future Features:
     List Items:
@@ -19,5 +21,9 @@ Future Features:
         ☐ Use a more modern looking design
         ☐ Add animations
         ☐ Use a custom list view
+
+General:
+    - Refactor some code
+        - Try to clean up some spaghetti
 
      

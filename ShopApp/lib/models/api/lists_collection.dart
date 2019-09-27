@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:family_list/models/list_metadata.dart';
+import 'package:family_list/models/api/list_metadata.dart';
 import 'package:family_list/util/urls.dart';
-import 'package:family_list/models/app_user.dart';
+import 'package:family_list/models/state/app_user.dart';
 
 class ListsCollection {
   /// Retrieve the lists associated with the logged in user.

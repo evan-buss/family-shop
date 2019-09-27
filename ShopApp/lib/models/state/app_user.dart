@@ -6,17 +6,20 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:family_list/util/urls.dart';
 
+/// LoginData is used to pass data from login form
 class LoginData {
   String email;
   String password;
 }
 
+/// SignUpData is used to pass data from the sign up form
 class SignUpData extends LoginData {
   String name;
   String familyName;
   String inviteCode;
 }
 
+/// AppState represents the current user state with the API
 enum AppState { LOGGED_IN, LOGGED_OUT }
 
 class AppUser with ChangeNotifier {
@@ -30,6 +33,9 @@ class AppUser with ChangeNotifier {
   AppState state = AppState.LOGGED_OUT;
   final storage = new FlutterSecureStorage();
 
+  /// Attempt to load data from the cache on class initialization
+  ///
+  /// This is called from main when the Provider is instantiated
   AppUser() {
     _loadIfCached();
   }
@@ -41,27 +47,24 @@ class AppUser with ChangeNotifier {
   void _loadIfCached() async {
     this.token = await storage.read(key: "token");
     if (token != null) {
-      http.Response response;
+      print("attempting to load cache");
 
       try {
-        response = await http
+        http.Response response = await http
             .get(pingURL, headers: {"Authorization": "Bearer $token"});
 
         if (response.statusCode == 200) {
-          // Load the valid saved data to memory
-          this.userID = int.parse(await storage.read(key: "id"));
-          this.email = await storage.read(key: "email");
-          this.password = await storage.read(key: "password");
-          this.username = await storage.read(key: "username");
+          // JWT still valid, inflate the saved data into memory
+          userID = int.parse(await storage.read(key: "id"));
+          email = await storage.read(key: "email");
+          password = await storage.read(key: "password");
+          username = await storage.read(key: "username");
           state = AppState.LOGGED_IN;
           notifyListeners();
         } else if (response.statusCode == 401) {
-          // Unauthorized. Attempt to log in again to refresh token...
-          print("REFRESHING JWT !!!");
+          // JWT invalid. Attempt to log in again with saved username/password
           var success = await _logWithSavedInfo();
-          if (!success) {
-            print("unable to refresh TOKEN");
-          }
+//          TODO: Not sure if i need to notify listeners here.
         }
       } catch (ex) {
         // Server is probably down...

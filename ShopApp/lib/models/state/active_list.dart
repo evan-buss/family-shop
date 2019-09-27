@@ -44,12 +44,13 @@ class ActiveList with ChangeNotifier {
   // Reload the list. The list must be loaded using loadList before calling reload.
   void reloadList() async {
     if (_token != null) {
-      var response = await http.get(itemsURL + _metaData.listID.toString(),
+      var response = await http.get(
+          itemsURL + "?list=${_metaData.listID.toString()}",
           headers: {"authorization": "Bearer $_token"});
       print(response.statusCode);
       if (response.statusCode == 200) {
         var jsonBody = json.decode(response.body);
-        items = jsonBody["items"]
+        items = jsonBody
             .map<ListItem>((json) => new ListItem.fromJson(json))
             .toList();
         notifyListeners();
@@ -91,7 +92,7 @@ class ActiveList with ChangeNotifier {
   /// Delete a specific item from the list
   void deleteItem(ListItem item) async {
     final response = await http.delete(
-      itemsURL + item.id.toString(),
+      itemsURL + "?list=${_metaData.listID}&item=${item.id.toString()}",
       headers: {"Authorization": "Bearer $_token"},
     );
     print(response.statusCode);

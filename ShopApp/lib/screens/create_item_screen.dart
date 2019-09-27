@@ -2,15 +2,15 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:camera/camera.dart';
-import 'package:family_list/models/list_item.dart';
+import 'package:family_list/models/api/list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
 import 'package:family_list/util/text_styles.dart';
 import 'package:family_list/widgets/camera_button_preview.dart';
-import 'package:family_list/models/app_user.dart';
-import 'package:family_list/models/list.dart';
+import 'package:family_list/models/state/app_user.dart';
+import 'package:family_list/models/state/active_list.dart';
 
 class CreateItemScreen extends StatefulWidget {
   final ListItem listItem;
@@ -36,14 +36,17 @@ class _CreateItemScreenState extends State<CreateItemScreen> {
 
   // Convert the image file to bytes
   Future<Uint8List> fileToBytes(String path) async {
-    return await File(path).readAsBytes();
+    if (path != null) {
+      return await File(path).readAsBytes();
+    }
+    return null;
   }
 
   @override
   void initState() {
     if (widget.listItem != null) {
       isEditMode = true;
-      _titleController.text = widget.listItem.title;
+      _titleController.text = widget.listItem.name;
       _descriptionController.text = widget.listItem.description;
     }
     super.initState();
@@ -53,7 +56,7 @@ class _CreateItemScreenState extends State<CreateItemScreen> {
   void _addItem(BuildContext context) async {
     list.addItem(
         ListItem(
-          title: _titleController.text,
+          name: _titleController.text,
           description: _descriptionController.text,
           image: await fileToBytes(imagePath),
         ),
@@ -63,8 +66,8 @@ class _CreateItemScreenState extends State<CreateItemScreen> {
 
   void _updateItem(BuildContext context) async {
     print("update item");
-    print(widget.listItem.itemID);
-    widget.listItem.title = _titleController.text;
+    print(widget.listItem.id);
+    widget.listItem.name = _titleController.text;
     widget.listItem.description = _descriptionController.text;
     if (imagePath != null) {
       widget.listItem.image = await fileToBytes(imagePath);

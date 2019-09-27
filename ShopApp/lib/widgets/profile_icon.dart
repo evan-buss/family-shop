@@ -6,7 +6,7 @@ class ProfileIcon extends StatelessWidget {
 
   ProfileIcon({this.name, this.x = 50, this.y = 50});
 
-  String getInitials() {
+  static String getInitials(String name) {
     return name.split(" ").take(2).map((f) => f.substring(0, 1)).join();
   }
 
@@ -17,7 +17,7 @@ class ProfileIcon extends StatelessWidget {
         avatar: CircleAvatar(
           backgroundColor: Theme.of(context).accentColor,
           child: Text(
-            getInitials(),
+            getInitials(name),
           ),
         ),
         label: Text(name),

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:family_list/main.dart';
-import 'package:family_list/models/app_user.dart';
-import 'package:family_list/models/list.dart';
-import 'package:family_list/models/list_metadata.dart';
-import 'package:family_list/models/lists_collection.dart';
+import 'package:family_list/models/state/app_user.dart';
+import 'package:family_list/models/state/active_list.dart';
+import 'package:family_list/models/api/list_metadata.dart';
+import 'package:family_list/models/api/lists_collection.dart';
 
 class ListDropdown extends StatelessWidget {
   final int _activePage;

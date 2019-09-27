@@ -1,13 +1,19 @@
 import 'dart:async';
 
-import 'package:family_list/models/list_item.dart';
+import 'package:family_list/models/api/list_item.dart';
+import 'package:family_list/util/text_styles.dart';
+import 'package:family_list/widgets/family_card_item.dart';
+import 'package:family_list/widgets/personal_card_item.dart';
+import 'package:family_list/widgets/profile_icon.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
-import 'package:family_list/models/app_user.dart';
+import 'package:family_list/models/state/app_user.dart';
 import 'package:family_list/screens/create_item_screen.dart';
-import 'package:family_list/models/list.dart';
+import 'package:family_list/models/state/active_list.dart';
 import 'package:family_list/widgets/picture_card.dart';
 
 // PersonalScreen displays the currently signed-in users personal items.
@@ -71,34 +77,11 @@ class _PersonalScreenState extends State<PersonalScreen> {
           return ListView.builder(
               itemCount: list.items.length,
               itemBuilder: (context, index) {
-                return Card(
-                  child: Dismissible(
-                    key: ObjectKey(list.items[index]),
-                    background: Container(
-                      color: Theme.of(context).errorColor,
-                    ),
-                    onDismissed: (direction) {
-                      _handleDelete(list, index);
-                    },
-                    child: ListTile(
-                      onTap: () {
-                        // Edit the item on click
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                CreateItemScreen(listItem: list.items[index]),
-                          ),
-                        );
-                      },
-                      title: Text(list.items[index].title),
-                      subtitle: Text(list.items[index].description),
-                      leading: list.items[index].image.isNotEmpty
-                          ? Image.memory(list.items[index].image)
-                          : Placeholder(),
-                    ),
-                  ),
-                );
+                return list.items[index].creator.id ==
+                        Provider.of<AppUser>(context).userID
+                    ? PersonalCardItem(
+                        list.items[index], () => _handleDelete(list, index))
+                    : FamilyCardItem();
               });
         }
         return Text("no lists found");

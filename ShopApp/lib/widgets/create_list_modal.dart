@@ -3,9 +3,9 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:family_list/models/app_user.dart';
-import 'package:family_list/models/list.dart';
-import 'package:family_list/models/lists_collection.dart';
+import 'package:family_list/models/state/app_user.dart';
+import 'package:family_list/models/state/active_list.dart';
+import 'package:family_list/models/api/lists_collection.dart';
 import 'package:family_list/util/text_styles.dart';
 
 class CreateListModal extends StatefulWidget {

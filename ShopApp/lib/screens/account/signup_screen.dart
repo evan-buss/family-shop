@@ -1,4 +1,4 @@
-import 'package:family_list/models/app_user.dart';
+import 'package:family_list/models/state/app_user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
