@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'dart:core';
 
-import 'package:family_list/models/list_item.dart';
+import 'package:family_list/models/api/list_item.dart';
+import 'package:family_list/util/urls.dart' as prefix0;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:family_list/models/list_metadata.dart';
+import 'package:family_list/models/api/list_metadata.dart';
 import 'package:family_list/util/urls.dart';
 
 class ActiveList with ChangeNotifier {
@@ -18,24 +19,28 @@ class ActiveList with ChangeNotifier {
 
   get metaData => _metaData;
 
-  // FIXME: Not sure if I like having to sepearate load methods. Not sure how to fix it.
+  // FIXME: Not sure if I like having two sepearate load methods. Not sure how to fix it.
   /// Load a given list given its metadata and an auth token
   void loadList(ListMetadata meta, String token) async {
     print("loading list from api");
     _metaData = meta;
     _token = token;
-    var response = await http.get(itemsURL + _metaData.listID.toString(),
+
+    print(itemsURL + "?list=${meta.listID.toString()}");
+
+    var response = await http.get(itemsURL + "?list=${meta.listID.toString()}",
         headers: {"authorization": "Bearer $token"});
     print(response.statusCode);
     if (response.statusCode == 200) {
       var jsonBody = json.decode(response.body);
-      items = jsonBody["items"]
+      items = jsonBody
           .map<ListItem>((json) => new ListItem.fromJson(json))
           .toList();
       notifyListeners();
     }
   }
 
+//  TODO: Refactor these two indential methods into a single method
   // Reload the list. The list must be loaded using loadList before calling reload.
   void reloadList() async {
     if (_token != null) {
@@ -86,7 +91,7 @@ class ActiveList with ChangeNotifier {
   /// Delete a specific item from the list
   void deleteItem(ListItem item) async {
     final response = await http.delete(
-      itemsURL + item.itemID.toString(),
+      itemsURL + item.id.toString(),
       headers: {"Authorization": "Bearer $_token"},
     );
     print(response.statusCode);

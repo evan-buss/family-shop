@@ -2,21 +2,22 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 class ListItem {
-  int itemID;
-  String title;
+  int id;
+  String name;
   String description;
   Uint8List image;
 
-  ListItem({this.itemID, this.title, this.description, this.image});
+  ListItem({this.id, this.name, this.description, this.image});
 
   /// Convert a json object to a ListItem.
   ///
   /// Used for converting API responses to Dart objects.
   factory ListItem.fromJson(Map<String, dynamic> json) {
     return ListItem(
-        itemID: json['itemID'],
-        title: json['title'],
+        id: json['id'],
+        name: json['name'],
         description: json['description'],
+//        image: Uint8List(10));
         image: base64.decode(json['image']));
   }
 
@@ -24,8 +25,8 @@ class ListItem {
   ///
   /// Used for API new item creation.
   Map<String, String> toJson(int listID) => {
-        'listID': listID.toString(),
-        'title': title,
+        'id': listID.toString(),
+        'name': name,
         'description': description,
         'image': base64.encode(image)
       };
@@ -34,9 +35,9 @@ class ListItem {
   ///
   /// Used for API new item creation.
   Map<String, String> toJsonPut(int listID) => {
-        'itemID': itemID.toString(),
+        'itemID': id.toString(),
         'listID': listID.toString(),
-        'title': title,
+        'title': name,
         'description': description,
         'image': base64.encode(image)
       };

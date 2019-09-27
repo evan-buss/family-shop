@@ -106,13 +106,16 @@ class AppUser with ChangeNotifier {
   }
 
   void login(LoginData data, Function callback) async {
+    print("Login called");
     try {
-      final response = await http.post(signInURL, headers: {
-        "Content-Type": "application/x-www-form-urlencoded"
-      }, body: {
-        "email": data.email,
-        "password": data.password
-      }).timeout(new Duration(seconds: 4));
+      final response = await http
+          .post(signInURL,
+              headers: {"Content-Type": "application/json"},
+              body:
+                  jsonEncode({"email": data.email, "password": data.password}))
+          .timeout(new Duration(seconds: 4));
+
+      print(response.statusCode);
 
       if (response.statusCode == 200) {
         _parseServerResponse(response.body, data);

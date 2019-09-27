@@ -7,7 +7,7 @@ class ListMetadata {
 
   factory ListMetadata.fromJson(Map<String, dynamic> json) {
     return ListMetadata(
-        listID: json['listID'],
+        listID: json['id'],
         title: json['title'],
         description: json['description']);
   }
