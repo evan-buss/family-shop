@@ -10,7 +10,6 @@ import com.evanbuss.shopapi.repository.ItemRepository;
 import com.evanbuss.shopapi.repository.ListRepository;
 import com.evanbuss.shopapi.security.UserPrinciple;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -44,21 +43,19 @@ public class ItemController {
     return ResponseEntity.notFound().build();
   }
 
-  @GetMapping(params = {"list", "item"})
-  public ResponseEntity<?> getItem(
-      @RequestParam long list, @RequestParam long item, Authentication authentication) {
+  @GetMapping(params = { "list", "item" })
+  public ResponseEntity<?> getItem(@RequestParam long list, @RequestParam long item, Authentication authentication) {
 
     Optional<Item> requestedItem = itemRepository.getItemByListIdAndId(list, item);
-    if (requestedItem.isPresent()
-        && userIsMemberOfFamily(requestedItem.get().getList().getFamily(), authentication)) {
+    if (requestedItem.isPresent() && userIsMemberOfFamily(requestedItem.get().getList().getFamily(), authentication)) {
       return ResponseEntity.ok(requestedItem.get());
     }
     return ResponseEntity.notFound().build();
   }
 
   @PostMapping
-  public ResponseEntity<?> createItem(
-      @Valid @RequestBody CreateItemRequest itemRequest, Authentication authentication) {
+  public ResponseEntity<?> createItem(@Valid @RequestBody CreateItemRequest itemRequest,
+      Authentication authentication) {
 
     User user = ((UserPrinciple) authentication.getPrincipal()).getUser();
 
@@ -68,21 +65,14 @@ public class ItemController {
       return ResponseEntity.notFound().build();
     }
 
-    Item item =
-        new Item(
-            user,
-            list.get(),
-            itemRequest.getName(),
-            itemRequest.getDescription(),
-            itemRequest.getImage());
+    Item item = new Item(user, list.get(), itemRequest.getName(), itemRequest.getDescription(), itemRequest.getImage());
     Item newItem = itemRepository.save(item);
 
     return ResponseEntity.ok(newItem);
   }
 
   @DeleteMapping
-  public ResponseEntity<?> deleteItem(
-      @RequestParam long list, @RequestParam long item, Authentication authentication) {
+  public ResponseEntity<?> deleteItem(@RequestParam long list, @RequestParam long item, Authentication authentication) {
 
     User user = ((UserPrinciple) authentication.getPrincipal()).getUser();
     boolean listExists = listRepository.existsById(list);
@@ -101,8 +91,7 @@ public class ItemController {
   }
 
   @PutMapping
-  public ResponseEntity<?> updateItem(
-      @RequestBody UpdateItemRequest request, Authentication authentication) {
+  public ResponseEntity<?> updateItem(@RequestBody UpdateItemRequest request, Authentication authentication) {
     Optional<Item> itemToUpdate = itemRepository.findById(request.getItemID());
 
     User user = ((UserPrinciple) authentication.getPrincipal()).getUser();

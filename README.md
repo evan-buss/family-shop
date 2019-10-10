@@ -31,6 +31,8 @@ flutter and I think it has real potential.
 
 ## Backend API
 
+<!-- TODO: Add link to postman API docs -->
+
 The backend API is written in C# using the open-source .Net Core from Microsoft. .Net Core runs on both Windows and Linux
 and uses C# which is very similar to Java, making learning it very easy. I also like the Entity Framework which is used
 for ORM.
