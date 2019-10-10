@@ -3,7 +3,8 @@
 A collaborative weekly shopping list for families.
 
 - Flutter
-- .NET Core
+- Spring Boot
+  - .NET Core (old version)
 - Docker / Docker Compose
 
 ## Early Screenshots
